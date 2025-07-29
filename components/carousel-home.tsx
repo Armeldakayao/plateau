@@ -700,6 +700,7 @@ export default function CarouselComponent() {
 
   return (
     <div className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden">
+      
       <div className="relative z-10 flex items-center justify-center h-full">
         <Carousel setApi={setApi} opts={{ loop: true }} className="w-full max-w-6xl mx-auto">
           <CarouselContent>

@@ -162,11 +162,12 @@ export default function Header() {
       icon: "🚱",
     },
     {
-      id: 4,
-      title: "Fête de l'indépendance : programme officiel disponible",
-      date: "20/07/2025",
-      icon: "🎉",
-    },
+  id: 4,
+  title: "🇨🇮 07 août – Fête de l'Indépendance dans votre commune à 08h",
+  date: "20/07/2025",
+  icon: "🇨🇮",
+}
+,
     {
       id: 5,
       title: "Travaux de réfection de voirie dès le 30 juillet",

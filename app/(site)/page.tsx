@@ -606,6 +606,7 @@ import { motion } from "framer-motion"
 import PageLoader from "@/components/page-loader"
 import HeroSection from "@/components/layout/hero-section"
 import CarouselComponent from "@/components/carousel-home"
+import DotsAnimation from "@/components/gradient"
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -705,7 +706,7 @@ export default function Home() {
   </div>
 </motion.section>
 
-
+  <h2 className="text-5xl font-semibold text-center text-secondary my-10">Découvrez nos plus beaux atouts.</h2>
         <motion.section
           className="relative overflow-hidden py-2"
           initial={{ opacity: 0 }}
@@ -725,6 +726,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-[#34A853]/60"></div>
           </div>
           {/* Contenu */}
+         
           <CarouselComponent />
         </motion.section>
 
@@ -735,6 +737,7 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
+          <DotsAnimation/>
           <div className="lg:px-28 px-7 space-y-7">
             <motion.h2 className="lg:text-5xl text-2xl font-extrabold text-center text-primary" {...fadeInUp}>
               À la une du plateau

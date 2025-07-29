@@ -78,6 +78,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       localStorage.setItem("user", JSON.stringify(newUser))
       setUser(newUser)
+      window.location.href = "/connexion"
       return Promise.resolve()
     } catch (error) {
       console.error("Erreur d'inscription:", error)

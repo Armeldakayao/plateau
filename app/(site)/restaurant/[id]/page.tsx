@@ -15,9 +15,9 @@ const detailsData = {
     description:
       "Découvrez les saveurs authentiques de l'Afrique de l'Ouest dans notre restaurant familial. Nos plats sont préparés avec des ingrédients frais et des recettes traditionnelles transmises de génération en génération.",
     images: [
-      "/placeholder.svg?height=400&width=600",
-      "/placeholder.svg?height=400&width=600",
-      "/placeholder.svg?height=400&width=600",
+      "https://cdn.tripinafrica.com/1920x1080/media/jWuvEfvO1B6ICZxdkOpEEFYtmBL5EdXZui8M5TcD.jpg",
+      "https://cdn.tripinafrica.com/1920x1080/media/jWuvEfvO1B6ICZxdkOpEEFYtmBL5EdXZui8M5TcD.jpg",
+      "https://cdn.tripinafrica.com/1920x1080/media/jWuvEfvO1B6ICZxdkOpEEFYtmBL5EdXZui8M5TcD.jpg",
     ],
     rating: 4.8,
     reviews: 127,
@@ -102,7 +102,7 @@ export default function DetailsPage({
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
         {/* Hero Section */}
         <div className="relative h-[60vh] overflow-hidden">
-          <Image src={'/images/service2.svg'} alt={data.title} fill className="object-cover" />
+          <Image src={data.images[0] || "/placeholder.svg"} alt={data.title} fill className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-8 left-8 text-white">
             <Link
@@ -110,7 +110,7 @@ export default function DetailsPage({
               className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 transition-colors"
             >
               <ArrowLeft size={20} />
-              Retour 
+             
             </Link>
             <h1 className="text-4xl md:text-6xl font-bold mb-2">{data.title}</h1>
             <p className="text-xl md:text-2xl text-white/90">{data.subtitle}</p>
