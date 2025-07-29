@@ -88,7 +88,7 @@ Lancez votre pré-demande en ligne et gagnez du temps.
                 ))}
               </div>
             </CardContent>
-            <Button className=" rounded-[5px] w-full bg-[#EF9213] hover:bg-[#EF9213] text-white py-7 text-xl  font-semibold">
+            <Button onClick={()=>window.location.href="/services/acte-mariage"} className=" rounded-[5px] w-full bg-[#EF9213] hover:bg-[#EF9213] text-white py-7 text-xl  font-semibold">
               Faire ma demande de mariage
             </Button>
           </motion.div>

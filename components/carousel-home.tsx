@@ -639,7 +639,7 @@ const slides: Slide[] = [
     type: "city-info",
     imageSrc: "https://www.mangalis.com/wp-content/uploads/sites/166/2024/09/Piscine-4.jpg",
     alt: "Abidjan city view",
-    title: "Mangalis Hotel",
+    title: "Noom Hotel",
     description:
       "Abidjan est la capitale économique de la Côte d'Ivoire. Un centre dynamique entre modernité et tradition.",
     qrData: "https://mangalis.com/booking",
@@ -704,7 +704,7 @@ export default function CarouselComponent() {
         <Carousel setApi={setApi} opts={{ loop: true }} className="w-full max-w-6xl mx-auto">
           <CarouselContent>
             {slides.map((slide, index) => (
-              <CarouselItem key={index}>
+              <CarouselItem className="cursor-pointer" onClick={()=>window.location.href = `restaurant/rice-restaurant`} key={index}>
                 <motion.div
                   className="p-4 md:p-8 flex items-center justify-center h-full"
                   initial={{ opacity: 0, scale: 0.98 }}

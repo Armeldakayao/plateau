@@ -54,7 +54,7 @@ const router = useRouter()
         transition={{ duration: 0.5 }}
       >
         <div className="absolute inset-0 bg-secondary/50 z-10"></div>
-        <Image src="/images/auth-bg.svg" alt="Connexion" fill className="object-cover" />
+        <Image src="/images/bg-auth.jpg" alt="Connexion" fill className="object-cover" />
         
       </motion.div>
 

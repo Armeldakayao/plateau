@@ -186,7 +186,7 @@ export default function Header() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed w-full top-0 z-50 shadow-md bg-white"
+      className="fixed w-full top-0 z-50 shadow-md backdrop-blur-md bg-black/20  dark:bg-gray-900"
     >
       {/* Top info banner */}
       <div className="relative w-full bg-green-600 overflow-hidden z-50 h-12 flex items-center">
@@ -200,8 +200,8 @@ export default function Header() {
       </div>
 
       {/* Main navigation bar */}
-      <div className="border-b">
-        <div className="md:px-16 px-4 py-4">
+      <div className="">
+        <div className="md:px-16 px-4 py-1">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
@@ -240,7 +240,7 @@ export default function Header() {
                    onClick={()=>window.location.href=item.href}
                     className={cn(
                       "text-lg font-medium cursor-pointer hover:text-primary transition-colors",
-                      pathname === item.href ? "text-primary" : "text-black"
+                      pathname === item.href ? "text-secondary font-bold" : "text-white"
                     )}
                   >
                     {item.label}

@@ -14,9 +14,9 @@ export default function HeroSection() {
   ]
 
   const iconLinks = [
+    { icon: "/link3.svg", title: "Demarches Administratives",label:"etat-civil" },
+    { icon: "/link2.svg", title: "Demande de mariage" ,label:"acte-mariage" },
     { icon: "/link1.svg", title: "Demander un rendez-vous",label:"demander-rendez-vous" },
-    { icon: "/link2.svg", title: "Célébrer mon mariage" ,label:"celebrer-mariage" },
-    { icon: "/link3.svg", title: "État civil",label:"etat-civil" },
     { icon: "/link3.svg", title: "Demander un partenariat",label:"demander-partenariat" },
     { icon: "/link4.svg", title: "Visiter ma commune",label:"visiter-commune" }, // Ajoutez une icone et un titre pour "Signaler un problème" },
   ]

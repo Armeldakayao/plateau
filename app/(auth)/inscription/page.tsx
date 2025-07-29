@@ -108,19 +108,19 @@ export default function InscriptionPage() {
   }
 
   return (
-    <>
-      <div className="relative min-h-[60vh] py-10 rounded-b-2xl ">
+    <div className="flex h-screen overflow-hidden">
+      <div className="relative h-screen  ">
         <div className="absolute inset-0">
           <Image
-            src="/images/auth-bg.svg"
+            src="/images/bg-auth.jpg"
             alt="Personnes souriantes"
             // width={800}
             // height={500}
             fill
-            className="w-full h-full object-cover rounded-b-[60px]"
+            className="w-full h-full object-cover "
           />
         </div>
-        <div className="absolute inset-0 bg-secondary/50 rounded-b-[60px]"></div>
+        <div className="absolute inset-0 bg-secondary/50"></div>
 
         <div className="relative z-10 flex flex-col justify-center h-full px-6">
           <div onClick={() => window.history.back()} className="max-w-4xl mx-auto space-y-16">
@@ -133,8 +133,8 @@ export default function InscriptionPage() {
           </div>
         </div>
       </div>
-      <div className="min-h-screen bg-gray-50">
-        <div className="container lg:max-w-5xl mx-auto py-8 px-4">
+      <div className="w-full">
+        <div className="max-h-[95vh] w-full   mx-auto py-8 px-4">
           {/* <div className="mb-8">
           <Link href="/" className="flex items-center text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -160,7 +160,8 @@ export default function InscriptionPage() {
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-12"
                 >
-                  <div>
+                 <div className="max-h-[75vh] w-full overflow-auto">
+                   <div >
                     <h2 className="text-2xl text-primary font-semibold mb-4">
                       Informations personnelles
                     </h2>
@@ -504,6 +505,7 @@ export default function InscriptionPage() {
                       )}
                     />
                   </div>
+                 </div>
 
                   <Button
                     type="submit"
@@ -530,6 +532,6 @@ export default function InscriptionPage() {
           </motion.div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
