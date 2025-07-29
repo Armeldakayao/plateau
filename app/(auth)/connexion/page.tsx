@@ -48,13 +48,13 @@ const router = useRouter()
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       <motion.div
-        className="w-full md:w-1/2 bg-green-500 relative overflow-hidden"
+        className="w-full md:w-1/2 bg-[#06223A] relative overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="absolute inset-0 bg-secondary/50 z-10"></div>
-        <Image src="/images/bg-auth.jpg" alt="Connexion" fill className="object-cover" />
+        {/* <div className="absolute inset-0 bg-black/20 z-10"></div> */}
+        <Image src="/images/auth-fond.jpg" alt="Connexion" fill className="object-contain" />
         
       </motion.div>
 

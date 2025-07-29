@@ -20,6 +20,8 @@ export default function Sidebar() {
   ]
 
   const handleLogout = () => {
+    window.localStorage.removeItem("user")
+    window.location.href = "/connexion"
     console.log("Déconnexion en cours...")
   }
 

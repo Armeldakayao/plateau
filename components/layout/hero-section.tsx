@@ -73,7 +73,8 @@ export default function HeroSection() {
       className="grid bg-[#1A6BAF]/70  grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-12 w-full max-w-full px-4 py-5 lg:px-28"
     >
       {iconLinks.map(({ icon, title, label }) => (
-        <motion.div className="cursor-pointer" onClick={()=>window.location.href = `/services/${label}`} key={title} variants={item}>
+        <motion.div className="cursor-pointer" onClick={() => window.location.href = label === "etat-civil" ? "/services" : `/services/${label}`}
+ key={title} variants={item}>
           <IconLinkCard icon={`/images/${icon}`} title={title} />
         </motion.div>
       ))}

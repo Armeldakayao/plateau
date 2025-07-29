@@ -1133,7 +1133,7 @@ export default function OrganizationGrid() {
       },
     },
   };
-
+ //@ts-ignore
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -1189,15 +1189,19 @@ export default function OrganizationGrid() {
             {/* Maire */}
             {currentMembers[0] && (
               <motion.div
+               //@ts-ignore
                 variants={mayorCardVariants}
                 whileHover="hover"
                 className="md:col-span-6 bg-transparent border border-gray-50 rounded-[5px] shadow-lg overflow-hidden flex flex-col md:flex-row text-white cursor-pointer"
               >
                 <motion.div
+                 //@ts-ignore
                   variants={mayorHoverVariants}
                   className="relative w-full md:w-[1000px] aspect-[3/4] md:aspect-auto overflow-hidden"
                 >
-                  <motion.div variants={mayorImageVariants}>
+                  <motion.div
+                   //@ts-ignore
+                   variants={mayorImageVariants}>
                     <Image
                       src={currentMembers[0].imageQuery}
                       width={700}
@@ -1252,12 +1256,17 @@ export default function OrganizationGrid() {
             {currentMembers.slice(1, 3).map((member) => (
               <motion.div
                 key={member.id}
+                 //@ts-ignore
                 variants={cardVariants}
                 whileHover="hover"
                 className="md:col-span-3 relative w-full aspect-[3/4] overflow-hidden rounded-lg flex flex-col cursor-pointer"
               >
-                <motion.div variants={hoverVariants} className="overflow-hidden rounded-[5px]">
-                  <motion.div variants={imageVariants}>
+                <motion.div 
+                 //@ts-ignore
+                variants={hoverVariants} className="overflow-hidden rounded-[5px]">
+                  <motion.div
+                   //@ts-ignore
+                   variants={imageVariants}>
                     <Image
                       src={member.imageQuery}
                       width={700}
@@ -1297,12 +1306,17 @@ export default function OrganizationGrid() {
             {currentMembers.slice(3, 7).map((member) => (
               <motion.div
                 key={member.id}
+                //@ts-ignore
                 variants={cardVariants}
                 whileHover="hover"
                 className="relative w-full aspect-[3/4] overflow-hidden rounded-lg flex flex-col cursor-pointer"
               >
-                <motion.div variants={hoverVariants} className="overflow-hidden rounded-[5px]">
-                  <motion.div variants={imageVariants}>
+                <motion.div 
+                 //@ts-ignore
+                variants={hoverVariants} className="overflow-hidden rounded-[5px]">
+                  <motion.div 
+                   //@ts-ignore
+                  variants={imageVariants}>
                     <Image
                       src={member.imageQuery}
                       width={700}
