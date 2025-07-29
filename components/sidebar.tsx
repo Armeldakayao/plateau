@@ -96,7 +96,7 @@ export default function Sidebar() {
 
               return (
                 <li key={item.id}>
-                  <Link href={item.href} onClick={() => setIsMobileMenuOpen(false)}>
+                  <div  onClick={() => {setIsMobileMenuOpen(false); window.location.href = item.href}} title={item.label}>
                     <Button
                       variant="ghost"
                       className={`w-full justify-start text-lg text-left h-12 px-4 transition-all duration-200 ${
@@ -106,7 +106,7 @@ export default function Sidebar() {
                       <Icon className="w-5 h-5 mr-3" />
                       {item.label}
                     </Button>
-                  </Link>
+                  </div>
                 </li>
               )
             })}
