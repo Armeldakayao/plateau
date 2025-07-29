@@ -836,7 +836,7 @@ export default function Home() {
                 variant="outline"
                 className="text-lg text-white px-8 py-7 font-medium rounded-[7px] border bg-primary hover:bg-primary hover:text-white"
               >
-                <Link href="/actualites">Voir toutes les actualités</Link>
+                <div onClick={()=>window.location.href="/actualites"}>Voir toutes les actualités</div>
               </Button>
             </motion.div>
           </div>
@@ -887,6 +887,7 @@ export default function Home() {
         >
           <motion.div variants={scaleIn}>
             <Button
+            onClick={()=>window.location.href="/connexion"}
               variant="outline"
               size="lg"
               className="bg-transparent w-full max-w-xs border rounded border-white text-white hover:bg-white hover:text-blue-800 px-8 py-3 text-base font-medium"
@@ -896,6 +897,7 @@ export default function Home() {
           </motion.div>
           <motion.div variants={scaleIn}>
             <Button
+              onClick={()=>window.location.href="/inscription"}
               size="lg"
               className="bg-secondary w-full max-w-xs rounded hover:bg-secondary/80 text-white px-8 py-3 text-base font-medium"
             >
@@ -987,6 +989,7 @@ export default function Home() {
       >
         <Button
           size="lg"
+          onClick={()=>window.location.href="/la-mairie"}
           className="bg-secondary text-white hover:bg-secondary rounded px-8 py-4 text-lg font-medium"
         >
           Tout savoir sur la mairie

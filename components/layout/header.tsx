@@ -189,7 +189,7 @@ export default function Header() {
       className="fixed w-full top-0 z-50 shadow-md bg-white"
     >
       {/* Top info banner */}
-      <div className="relative w-full bg-green-600 overflow-hidden h-12 flex items-center">
+      <div className="relative w-full bg-green-600 overflow-hidden z-50 h-12 flex items-center">
         <div className="absolute whitespace-nowrap animate-marquee font-medium text-white text-lg">
           {fakeNews.map((news) => (
             <span key={news.id} className="mx-8">
@@ -236,15 +236,15 @@ export default function Header() {
                   animate="visible"
                   variants={navVariants}
                 >
-                  <Link
-                    href={item.href}
+                  <div
+                   onClick={()=>window.location.href=item.href}
                     className={cn(
-                      "text-lg font-medium hover:text-primary transition-colors",
+                      "text-lg font-medium cursor-pointer hover:text-primary transition-colors",
                       pathname === item.href ? "text-primary" : "text-black"
                     )}
                   >
                     {item.label}
-                  </Link>
+                  </div>
                 </motion.div>
               ))}
             </div>

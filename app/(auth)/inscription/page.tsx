@@ -123,7 +123,7 @@ export default function InscriptionPage() {
         <div className="absolute inset-0 bg-secondary/50 rounded-b-[60px]"></div>
 
         <div className="relative z-10 flex flex-col justify-center h-full px-6">
-          <div className="max-w-4xl mx-auto space-y-16">
+          <div onClick={() => window.history.back()} className="max-w-4xl mx-auto space-y-16">
             {/* <Button variant="ghost" className="text-white h-20 w-20 hover:bg-white/20 mb-4 p-2"> */}
             <ArrowLeft className="h-20 w-20 text-white" />
             {/* </Button> */}

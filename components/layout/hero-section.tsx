@@ -14,11 +14,11 @@ export default function HeroSection() {
   ]
 
   const iconLinks = [
-    { icon: "/link1.svg", title: "Demander un rendez-vous" },
-    { icon: "/link2.svg", title: "Célébrer mon mariage" },
-    { icon: "/link3.svg", title: "État civil" },
-    { icon: "/link3.svg", title: "Demander un partenariat" },
-    { icon: "/link4.svg", title: "Visiter ma commune" }, // Ajoutez une icone et un titre pour "Signaler un problème" },
+    { icon: "/link1.svg", title: "Demander un rendez-vous",label:"demander-rendez-vous" },
+    { icon: "/link2.svg", title: "Célébrer mon mariage" ,label:"celebrer-mariage" },
+    { icon: "/link3.svg", title: "État civil",label:"etat-civil" },
+    { icon: "/link3.svg", title: "Demander un partenariat",label:"demander-partenariat" },
+    { icon: "/link4.svg", title: "Visiter ma commune",label:"visiter-commune" }, // Ajoutez une icone et un titre pour "Signaler un problème" },
   ]
 
   const container = {
@@ -72,8 +72,8 @@ export default function HeroSection() {
       animate="show"
       className="grid bg-[#1A6BAF]/70  grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-12 w-full max-w-full px-4 py-5 lg:px-28"
     >
-      {iconLinks.map(({ icon, title }) => (
-        <motion.div key={title} variants={item}>
+      {iconLinks.map(({ icon, title, label }) => (
+        <motion.div className="cursor-pointer" onClick={()=>window.location.href = `/services/${label}`} key={title} variants={item}>
           <IconLinkCard icon={`/images/${icon}`} title={title} />
         </motion.div>
       ))}
