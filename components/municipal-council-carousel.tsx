@@ -118,7 +118,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 
 const councilMembers = [
-  { id: 1, name: "Jacques Ehouo", title: "Le Maire", image: "/images/jacques.svg" },
+  { id: 1, name: "Jacques Ehouo", title: "Le Maire", image: "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1215,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2021/09/29/jad20210929-ass-ci-jacquesehouo.jpg" },
   { id: 2, name: "Jean Kouassi", title: "Adjoint au Maire", image: "/images/r1.svg" },
   { id: 3, name: "Marie Konan", title: "Conseillère", image: "/images/r2.svg" },
   { id: 4, name: "Paul N’Guessan", title: "Conseiller", image: "/images/r3.svg" },
@@ -152,7 +152,7 @@ export default function MunicipalCouncilCarousel() {
             <source src="/videos/blue-digital.mp4" type="video/mp4" />
             Votre navigateur ne supporte pas la vidéo HTML5.
           </video>
-          <div className="absolute inset-0 bg-black opacity-20"></div>
+          <div className="absolute inset-0 bg-black opacity-40"></div>
       <div className="relative z-10 px-4 md:px-6 text-center">
         <div className="space-y-4 mb-8">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Votre Conseil Municipal</h2>

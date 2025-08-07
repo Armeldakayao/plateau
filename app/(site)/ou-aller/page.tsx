@@ -1150,7 +1150,13 @@ export default function HomePage() {
           {/* <div className="absolute inset-0 bg-black bg-opacity-10 z-10" /> */}
           {/* Contenu du carousel */}
           <h1 className="text-5xl font-bold text-white text-center">Ou dromir sur le Plateau</h1>
-          <div className="relative z-20 m-20 bg-white rounded-[8px] px-4  py-20">
+          <div className="relative z-20 m-20 mb-20 bg-white rounded-[8px] px-4  py-10">
+             <SectionHeader
+            title="Ou Sejourner au Plateau ?"
+            description=""
+            textColor="text-green-600"
+            descriptionColor="text-gray-700"
+          />
             <CardCarousel>
               {hotels.map((hotel) => (
                 <HotelCard key={hotel.id}

@@ -19,6 +19,15 @@ export const servicesData: ServiceCategory[] = [
     id: "etat-civil",
     title: "État civil",
     services: [
+       {
+        id: "demander-rendez-vous",
+        title: "Demander un rendez-vous",
+        description: "Prendre rendez-vous avec les services municipaux pour vos démarches administratives spécifiques.",
+        duree: "Selon disponibilité",
+        conditions: ["Motif de rendez-vous précisé", "Disponibilité des services", "Respect des créneaux proposés"],
+        documents: ["Pièce d'identité", "Documents relatifs à la demande", "Justificatifs selon le motif"],
+        category: "services-generaux",
+      },
       {
         id: "acte-naissance",
         title: "Acte de naissance",
@@ -344,29 +353,21 @@ export const servicesData: ServiceCategory[] = [
     id: "services-generaux",
     title: "Services généraux",
     services: [
-      {
-        id: "demander-rendez-vous",
-        title: "Demander un rendez-vous",
-        description: "Prendre rendez-vous avec les services municipaux pour vos démarches administratives spécifiques.",
-        duree: "Selon disponibilité",
-        conditions: ["Motif de rendez-vous précisé", "Disponibilité des services", "Respect des créneaux proposés"],
-        documents: ["Pièce d'identité", "Documents relatifs à la demande", "Justificatifs selon le motif"],
-        category: "services-generaux",
-      },
-      {
-        id: "visiter-commune",
-        title: "Visiter ma commune",
-        description:
-          "Organiser une visite guidée de la commune du Plateau pour découvrir son patrimoine et ses services.",
-        duree: "Sur réservation",
-        conditions: [
-          "Réservation préalable obligatoire",
-          "Groupe de minimum 5 personnes",
-          "Respect des horaires de visite",
-        ],
-        documents: ["Formulaire de réservation", "Liste des participants", "Contact du responsable de groupe"],
-        category: "services-generaux",
-      },
+     
+      // {
+      //   id: "visiter-commune",
+      //   title: "Visiter ma commune",
+      //   description:
+      //     "Organiser une visite guidée de la commune du Plateau pour découvrir son patrimoine et ses services.",
+      //   duree: "Sur réservation",
+      //   conditions: [
+      //     "Réservation préalable obligatoire",
+      //     "Groupe de minimum 5 personnes",
+      //     "Respect des horaires de visite",
+      //   ],
+      //   documents: ["Formulaire de réservation", "Liste des participants", "Contact du responsable de groupe"],
+      //   category: "services-generaux",
+      // },
       {
         id: "occupation-domaine-public",
         title: "Occupation du domaine public",
