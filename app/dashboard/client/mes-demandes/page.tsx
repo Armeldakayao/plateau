@@ -1,976 +1,234 @@
-// // "use client"
-
-// // import { useState, useEffect } from "react"
-// // import Link from "next/link"
-// // import { Button } from "@/components/ui/button"
-// // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-// // import { Badge } from "@/components/ui/badge"
-// // import { Input } from "@/components/ui/input"
-// // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-// // import { Eye, Search, Filter, Download, Plus, Calendar, Paperclip } from "lucide-react"
-// // import Sidebar from "@/components/sidebar"
-
-// // export default function MesDemandesPage() {
-// //   const [isLoading, setIsLoading] = useState(true)
-// //   const [searchTerm, setSearchTerm] = useState("")
-// //   const [statusFilter, setStatusFilter] = useState("all")
-// //   const [typeFilter, setTypeFilter] = useState("all")
-// //   const [categoryFIlter, setCategoryFilter] = useState("all")
-
-// //   useEffect(() => {
-// //     const timer = setTimeout(() => {
-// //       setIsLoading(false)
-// //     }, 1000)
-// //     return () => clearTimeout(timer)
-// //   }, [])
-
-// //   const demandes = [
-// //     {
-// //       id: "1",
-// //       type: "Certificat de résidence",
-// //       numero: "LMJ-5-007",
-// //       statut: "Terminé",
-// //       dateEnvoi: "20/05/2024",
-// //       dateLimite: "27/05/2024",
-// //       description: "Demande de certificat de résidence pour démarches administratives",
-// //     },
-// //     {
-// //       id: "2",
-// //       type: "Carte de commerçant",
-// //       numero: "JAH-6-022",
-// //       statut: "En cours",
-// //       dateEnvoi: "12/04/2024",
-// //       dateLimite: "19/04/2024",
-// //       description: "Demande de carte de commerçant pour activité commerciale",
-// //     },
-// //     {
-// //       id: "3",
-// //       type: "Autorisation de domicile",
-// //       numero: "DOM-3-015",
-// //       statut: "En attente",
-// //       dateEnvoi: "15/03/2024",
-// //       dateLimite: "22/03/2024",
-// //       description: "Autorisation de domicile pour nouvelle adresse",
-// //     },
-// //     {
-// //       id: "4",
-// //       type: "Extrait de naissance",
-// //       numero: "NAI-2-008",
-// //       statut: "Rejeté",
-// //       dateEnvoi: "08/02/2024",
-// //       dateLimite: "15/02/2024",
-// //       description: "Demande d'extrait de naissance certifié",
-// //     },
-// //     {
-// //       id: "5",
-// //       type: "Certificat de mariage",
-// //       numero: "MAR-1-001",
-// //       statut: "Terminé",
-// //       dateEnvoi: "01/01/2024",
-// //       dateLimite: "08/01/2024",
-// //       description: "Demande de certificat de mariage pour mariage civil",
-// //     },
-// //     {
-// //       id: "6",
-// //       type: "Certificat de mariage",
-// //       numero: "MAR-1-001",
-// //       statut: "Terminé",
-// //       dateEnvoi: "01/01/2024",
-// //       dateLimite: "08/01/2024",
-// //       description: "Demande de certificat de mariage pour mariage civil",
-// //     },
-// //     {
-// //       id: "7",
-// //       type: "Certificat de mariage",
-// //       numero: "MAR-1-001",
-// //       statut: "Terminé",
-// //       dateEnvoi: "01/01/2024",
-// //       dateLimite: "08/01/2024",
-// //       description: "Demande de certificat de mariage pour mariage civil",
-// //     },
-// //     {
-// //       id: "8",
-// //       type: "Certificat de mariage",
-// //       numero: "MAR-1-001",
-// //       statut: "Terminé",
-// //       dateEnvoi: "01/01/2024",
-// //       dateLimite: "08/01/2024",
-// //       description: "Demande de certificat de mariage pour mariage civil",
-// //     },
-// //     {
-// //       id: "9",
-// //       type: "Certificat de mariage",
-// //       numero: "MAR-1-001",
-// //       statut: "Terminé",
-// //       dateEnvoi: "01/01/2024",
-// //       dateLimite: "08/01/2024",
-// //       description: "Demande de certificat de mariage pour mariage civil",
-// //     },
-// //     {
-// //       id: "10",
-// //       type: "Certificat de mariage",
-// //       numero: "MAR-1-001",
-// //       statut: "Terminé",
-// //       dateEnvoi: "01/01/2024",
-// //       dateLimite: "08/01/2024",
-// //       description: "Demande de certificat de mariage pour mariage civil",
-// //     },
-// //   ]
-
-// //   const getStatusBadge = (statut: string) => {
-// //     switch (statut) {
-// //       case "Terminé":
-// //         return <Badge className="bg-green-500 text-white hover:bg-green-500 px-3 py-1 text-xs">Terminé</Badge>
-// //       case "En cours":
-// //         return <Badge className="bg-blue-500 text-white hover:bg-blue-500 px-3 py-1 text-xs">En cours</Badge>
-// //       case "En attente":
-// //         return <Badge className="bg-orange-500 text-white hover:bg-orange-500 px-3 py-1 text-xs">En attente</Badge>
-// //       case "Rejeté":
-// //         return <Badge className="bg-red-500 text-white hover:bg-red-500 px-3 py-1 text-xs">Rejeté</Badge>
-// //       default:
-// //         return <Badge variant="secondary">{statut}</Badge>
-// //     }
-// //   }
-
-// //   const filteredDemandes = demandes.filter((demande) => {
-// //     const matchesSearch =
-// //       demande.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-// //       demande.numero.toLowerCase().includes(searchTerm.toLowerCase())
-// //     const matchesStatus = statusFilter === "all" || demande.statut === statusFilter
-// //     const matchesType = typeFilter === "all" || demande.type === typeFilter
-// //     const matchesCategory = categoryFIlter === "all" || demande.description.toLowerCase().includes(categoryFIlter.toLowerCase())
-
-// //     return matchesSearch && matchesStatus && matchesType && matchesCategory
-// //   })
-
-// //   const handleExport = () => {
-// //     console.log("Export des demandes")
-// //   }
-
-// //   const handleNewDemande = () => {
-// //     console.log("Nouvelle demande")
-// //   }
-
-// //   if (isLoading) {
-// //     return (
-// //       <div className="flex min-h-screen bg-gray-50">
-// //         <Sidebar />
-// //         <div className="flex-1 md:ml-64 flex items-center justify-center">
-// //           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-// //         </div>
-// //       </div>
-// //     )
-// //   }
-
-// //   return (
-// //     <div className="flex min-h-screen bg-gray-50">
-// //       <Sidebar />
-// //       <div className="flex-1 md:ml-64 p-4 md:p-8">
-// //         {/* Header */}
-// //         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-4">
-// //           <div>
-// //            <h1 className="text-2xl md:text-4xl font-bold text-primary">
-// //            Mes demandes
-// //           </h1>
-           
-// //           </div>
-// //           <div className="flex gap-2">
-           
-// //             <Button
-// //               className="bg-primary hover:bg-primary text-white text-lg transition-colors duration-200"
-// //               onClick={handleNewDemande}
-// //             >
-// //               <Plus className="w-4 h-4 mr-2" />
-// //               Nouvelle demande
-// //             </Button>
-// //           </div>
-// //         </div>
-
-// //         {/* Filters */}
-// //         <Card className="shadow-sm border-gray-200 bg-gray-100 mb-6">
-// //           <CardContent className="p-4 md:p-6">
-// //             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-// //               <div className="relative">
-// //                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-// //                 <Input
-// //                   placeholder="Rechercher une demande..."
-// //                   value={searchTerm}
-// //                   onChange={(e) => setSearchTerm(e.target.value)}
-// //                   className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-// //                 />
-// //               </div>
-// //               <Select value={statusFilter} onValueChange={setStatusFilter}>
-// //                 <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-// //                   <SelectValue placeholder="Filtrer par statut" />
-// //                 </SelectTrigger>
-// //                 <SelectContent>
-// //                   <SelectItem value="all">Tous les statuts</SelectItem>
-// //                   <SelectItem value="Terminé">Terminé</SelectItem>
-// //                   <SelectItem value="En cours">En cours</SelectItem>
-// //                   <SelectItem value="En attente">En attente</SelectItem>
-// //                   <SelectItem value="Rejeté">Rejeté</SelectItem>
-// //                 </SelectContent>
-// //               </Select>
-// //               <Select value={typeFilter} onValueChange={setTypeFilter}>
-// //                 <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-// //                   <SelectValue placeholder="Filtrer par type" />
-// //                 </SelectTrigger>
-// //                 <SelectContent>
-// //                   <SelectItem value="all">Tous les types</SelectItem>
-// //                   <SelectItem value="Certificat de résidence">Certificat de résidence</SelectItem>
-// //                   <SelectItem value="Carte de commerçant">Carte de commerçant</SelectItem>
-// //                   <SelectItem value="Autorisation de domicile">Autorisation de domicile</SelectItem>
-// //                   <SelectItem value="Extrait de naissance">Extrait de naissance</SelectItem>
-// //                 </SelectContent>
-// //               </Select>
-// //              <Select value={categoryFIlter} onValueChange={setCategoryFilter}>
-// //                 <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-// //                   <SelectValue placeholder="Filtrer par catégorie" />
-// //                 </SelectTrigger>
-// //                 <SelectContent>
-// //                   <SelectItem value="all">Toutes les catégories</SelectItem>
-// //                   <SelectItem value="administrative">Administrative</SelectItem>
-// //                   <SelectItem value="commerciale">Commerciale</SelectItem>
-// //                   <SelectItem value="personnelle">Personnelle</SelectItem>
-// //                 </SelectContent>
-// //               </Select>
-// //             </div>
-// //           </CardContent>
-// //         </Card>
-
-// //         {/* Demandes List */}
-// //         <Card className="shadow-sm border-gray-200">
-// //           <CardHeader className="border-b border-gray-200">
-// //             <CardTitle className="text-2xl font-semibold text-gray-900">
-// //               Liste des demandes ({filteredDemandes.length})
-// //             </CardTitle>
-// //           </CardHeader>
-// //           <CardContent className="p-0">
-// //             <div className="overflow-x-auto">
-// //               <table className="w-full">
-// //                 <thead className="bg-gray-50 border-b border-gray-200">
-// //                   <tr>
-// //                     <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg">Type </th>
-// //                      <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg hidden md:table-cell">
-// //                       Envoyee le
-// //                     </th>
-// //                     <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg">Statut</th>
-// //                     <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg hidden sm:table-cell">
-// //                      Piece jointe
-// //                     </th>
-                    
-                   
-// //                     <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg hidden lg:table-cell">
-// //                       Derniere mise à jour
-// //                     </th>
-// //                     <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg"></th>
-// //                   </tr>
-// //                 </thead>
-// //                 <tbody>
-// //                   {filteredDemandes.map((demande) => (
-// //                     <tr
-// //                       key={demande.id}
-// //                       className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200"
-// //                     >
-// //                       <td className="py-4 px-4 md:px-6 text-gray-600 text-lg hidden md:table-cell">
-// //                         <div className="flex items-center gap-1">
-// //                           <Calendar className="w-4 h-4 text-gray-400" />
-// //                           {demande.dateEnvoi}
-// //                         </div>
-// //                       </td>
-// //                       <td className="py-4 px-4 md:px-6">
-// //                         <div>
-// //                           <p className="font-medium text-gray-900 text-lg">{demande.type}</p>
-// //                           {/* <p className="text-md text-gray-500 mt-1 hidden sm:block">{demande.description}</p> */}
-// //                         </div>
-// //                       </td>
-// //                       <td className="py-4 px-4 text-lg md:px-6">{getStatusBadge(demande.statut)}</td>
-// //                       <td className="py-4 px-4 md:px-6 text-gray-600 text-lg hidden sm:table-cell font-mono">
-// //                         <div className="flex items-center gap-1">
-// //                           <Paperclip className="w-4 h-4 text-gray-400" />
-// //                          05
-// //                         </div>
-// //                       </td>
-// //                       <td className="py-4 px-4 md:px-6 text-gray-600 text-lg hidden lg:table-cell">
-// //                         <div className="flex items-center gap-1">
-// //                           <Calendar className="w-4 h-4 text-gray-400" />
-// //                           {demande.dateLimite}
-// //                         </div>
-// //                       </td>
-// //                       <td className="py-4 gap-3 px-4 md:px-6">
-// //                         <Link href={`/dashboard/client/mes-demandes/${demande.id}`}>
-// //                           <Button
-// //                             variant="ghost"
-// //                             size="sm"
-// //                             className="bg-primary text-lg  text-white hover:bg-primary transition-colors duration-200"
-// //                           >
-                            
-// //                             Voir
-// //                           </Button>
-// //                         </Link>
-// //                           <Button
-// //                             variant="outline"
-// //                             size="sm"
-// //                             className="border-primary ml-2 text-primary hover:border-primary transition-colors duration-200"
-// //                           >
-// //                             <Download className="w-4 h-4 " />
-                           
-// //                           </Button>
-// //                       </td>
-// //                     </tr>
-// //                   ))}
-// //                 </tbody>
-// //               </table>
-// //             </div>
-
-// //             {filteredDemandes.length === 0 && (
-// //               <div className="text-center py-12">
-// //                 <p className="text-gray-500 text-lg mb-4">Aucune demande trouvée</p>
-// //                 <p className="text-gray-400 text-sm mb-6">Essayez de modifier vos critères de recherche</p>
-// //                 <Button
-// //                   className="bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200"
-// //                   onClick={handleNewDemande}
-// //                 >
-// //                   <Plus className="w-4 h-4 mr-2" />
-// //                   Créer une nouvelle demande
-// //                 </Button>
-// //               </div>
-// //             )}
-// //           </CardContent>
-// //         </Card>
-// //       </div>
-// //     </div>
-// //   )
-// // }
-// "use client"
-// import { useState, useEffect } from "react"
-// import Link from "next/link"
-// import { Button } from "@/components/ui/button"
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-// import { Badge } from "@/components/ui/badge"
-// import { Input } from "@/components/ui/input"
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-// import { Search, Download, Plus, Calendar, Paperclip } from "lucide-react"
-// import Sidebar from "@/components/sidebar"
-// import { AddDemandeModal } from "@/components/dd-demande-modal"
-// // import { AddDemandeModal } from "@/components/add-demande-modal"
-
-// interface Demande {
-//   id: string
-//   type: string
-//   numero: string
-//   statut: string
-//   dateEnvoi: string
-//   dateLimite: string
-//   description: string
-// }
-
-// export default function MesDemandesPage() {
-//   const [isLoading, setIsLoading] = useState(true)
-//   const [searchTerm, setSearchTerm] = useState("")
-//   const [statusFilter, setStatusFilter] = useState("all")
-//   const [typeFilter, setTypeFilter] = useState("all")
-//   const [categoryFIlter, setCategoryFilter] = useState("all")
-//   const [isModalOpen, setIsModalOpen] = useState(false) // State for modal visibility
-//   const [demandes, setDemandes] = useState<Demande[]>([
-//     // Initialize with existing data
-//     {
-//       id: "1",
-//       type: "Certificat de résidence",
-//       numero: "LMJ-5-007",
-//       statut: "Terminé",
-//       dateEnvoi: "20/05/2024",
-//       dateLimite: "27/05/2024",
-//       description: "Demande de certificat de résidence pour démarches administratives",
-//     },
-//     {
-//       id: "2",
-//       type: "Carte de commerçant",
-//       numero: "JAH-6-022",
-//       statut: "En cours",
-//       dateEnvoi: "12/04/2024",
-//       dateLimite: "19/04/2024",
-//       description: "Demande de carte de commerçant pour activité commerciale",
-//     },
-//     {
-//       id: "3",
-//       type: "Autorisation de domicile",
-//       numero: "DOM-3-015",
-//       statut: "En attente",
-//       dateEnvoi: "15/03/2024",
-//       dateLimite: "22/03/2024",
-//       description: "Autorisation de domicile pour nouvelle adresse",
-//     },
-//     {
-//       id: "4",
-//       type: "Extrait de naissance",
-//       numero: "NAI-2-008",
-//       statut: "Rejeté",
-//       dateEnvoi: "08/02/2024",
-//       dateLimite: "15/02/2024",
-//       description: "Demande d'extrait de naissance certifié",
-//     },
-//     {
-//       id: "5",
-//       type: "Certificat de mariage",
-//       numero: "MAR-1-001",
-//       statut: "Terminé",
-//       dateEnvoi: "01/01/2024",
-//       dateLimite: "08/01/2024",
-//       description: "Demande de certificat de mariage pour mariage civil",
-//     },
-//     {
-//       id: "6",
-//       type: "Certificat de mariage",
-//       numero: "MAR-1-001",
-//       statut: "Terminé",
-//       dateEnvoi: "01/01/2024",
-//       dateLimite: "08/01/2024",
-//       description: "Demande de certificat de mariage pour mariage civil",
-//     },
-//     {
-//       id: "7",
-//       type: "Certificat de mariage",
-//       numero: "MAR-1-001",
-//       statut: "Terminé",
-//       dateEnvoi: "01/01/2024",
-//       dateLimite: "08/01/2024",
-//       description: "Demande de certificat de mariage pour mariage civil",
-//     },
-//     {
-//       id: "8",
-//       type: "Certificat de mariage",
-//       numero: "MAR-1-001",
-//       statut: "Terminé",
-//       dateEnvoi: "01/01/2024",
-//       dateLimite: "08/01/2024",
-//       description: "Demande de certificat de mariage pour mariage civil",
-//     },
-//     {
-//       id: "9",
-//       type: "Certificat de mariage",
-//       numero: "MAR-1-001",
-//       statut: "Terminé",
-//       dateEnvoi: "01/01/2024",
-//       dateLimite: "08/01/2024",
-//       description: "Demande de certificat de mariage pour mariage civil",
-//     },
-//     {
-//       id: "10",
-//       type: "Certificat de mariage",
-//       numero: "MAR-1-001",
-//       statut: "Terminé",
-//       dateEnvoi: "01/01/2024",
-//       dateLimite: "08/01/2024",
-//       description: "Demande de certificat de mariage pour mariage civil",
-//     },
-//   ])
-
-//   useEffect(() => {
-//     const timer = setTimeout(() => {
-//       setIsLoading(false)
-//     }, 1000)
-//     return () => clearTimeout(timer)
-//   }, [])
-
-//   const getStatusBadge = (statut: string) => {
-//     switch (statut) {
-//       case "Terminé":
-//         return <Badge className="bg-green-500 text-white hover:bg-green-500 px-3 py-1 text-xs">Terminé</Badge>
-//       case "En cours":
-//         return <Badge className="bg-blue-500 text-white hover:bg-blue-500 px-3 py-1 text-xs">En cours</Badge>
-//       case "En attente":
-//         return <Badge className="bg-orange-500 text-white hover:bg-orange-500 px-3 py-1 text-xs">En attente</Badge>
-//       case "Rejeté":
-//         return <Badge className="bg-red-500 text-white hover:bg-red-500 px-3 py-1 text-xs">Rejeté</Badge>
-//       default:
-//         return <Badge variant="secondary">{statut}</Badge>
-//     }
-//   }
-
-//   const filteredDemandes = demandes.filter((demande) => {
-//     const matchesSearch =
-//       demande.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//       demande.numero.toLowerCase().includes(searchTerm.toLowerCase())
-//     const matchesStatus = statusFilter === "all" || demande.statut === statusFilter
-//     const matchesType = typeFilter === "all" || demande.type === typeFilter
-//     // The original code used description for category filter, which is not ideal.
-//     // For now, I'll keep it as is, but a proper category field would be better.
-//     const matchesCategory =
-//       categoryFIlter === "all" || demande.description.toLowerCase().includes(categoryFIlter.toLowerCase())
-//     return matchesSearch && matchesStatus && matchesType && matchesCategory
-//   })
-
-//   const handleNewDemandeSubmit = (data: {
-//     type: string
-//     description: string
-//     dateEnvoi: string
-//     dateLimite: string
-//     attachments: File[]
-//   }) => {
-//     console.log("New Demande Data:", data)
-//     // Generate a unique ID for the new demand
-//     const newId = (demandes.length + 1).toString()
-//     // Generate a fake numero (e.g., based on type and ID)
-//     const newNumero = `${data.type.substring(0, 3).toUpperCase()}-${newId}-001`
-//     const newDemande: Demande = {
-//       id: newId,
-//       type: data.type,
-//       numero: newNumero,
-//       statut: "En attente", // New demands start as "En attente"
-//       dateEnvoi: data.dateEnvoi,
-//       dateLimite: data.dateLimite,
-//       description: data.description,
-//     }
-//     setDemandes((prevDemandes) => [...prevDemandes, newDemande])
-//     setIsModalOpen(false) // Close modal after submission
-//   }
-
-//   if (isLoading) {
-//     return (
-//       <div className="flex min-h-screen bg-gray-50">
-//         <Sidebar />
-//         <div className="flex-1 md:ml-64 flex items-center justify-center">
-//           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-//         </div>
-//       </div>
-//     )
-//   }
-
-//   return (
-//     <div className="flex min-h-screen bg-gray-50">
-//       <Sidebar />
-//       <div className="flex-1 md:ml-64 p-4 md:p-8">
-//         {/* Header */}
-//         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-4">
-//           <div>
-//             <h1 className="text-2xl md:text-4xl font-bold text-primary">Mes demandes</h1>
-//           </div>
-//           <div className="flex gap-2">
-//             <Button
-//               className="bg-primary hover:bg-primary text-white text-lg transition-colors duration-200"
-//               onClick={() => setIsModalOpen(true)} // Open modal on click
-//             >
-//               <Plus className="w-4 h-4 mr-2" />
-//               Nouvelle demande
-//             </Button>
-//           </div>
-//         </div>
-//         {/* Filters */}
-//         <Card className="shadow-sm border-gray-200 bg-gray-100 mb-6">
-//           <CardContent className="p-4 md:p-6">
-//             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-//               <div className="relative">
-//                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-//                 <Input
-//                   placeholder="Rechercher une demande..."
-//                   value={searchTerm}
-//                   onChange={(e) => setSearchTerm(e.target.value)}
-//                   className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-//                 />
-//               </div>
-//               <Select value={statusFilter} onValueChange={setStatusFilter}>
-//                 <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-//                   <SelectValue placeholder="Filtrer par statut" />
-//                 </SelectTrigger>
-//                 <SelectContent>
-//                   <SelectItem value="all">Tous les statuts</SelectItem>
-//                   <SelectItem value="Terminé">Terminé</SelectItem>
-//                   <SelectItem value="En cours">En cours</SelectItem>
-//                   <SelectItem value="En attente">En attente</SelectItem>
-//                   <SelectItem value="Rejeté">Rejeté</SelectItem>
-//                 </SelectContent>
-//               </Select>
-//               <Select value={typeFilter} onValueChange={setTypeFilter}>
-//                 <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-//                   <SelectValue placeholder="Filtrer par type" />
-//                 </SelectTrigger>
-//                 <SelectContent>
-//                   <SelectItem value="all">Tous les types</SelectItem>
-//                   <SelectItem value="Certificat de résidence">Certificat de résidence</SelectItem>
-//                   <SelectItem value="Carte de commerçant">Carte de commerçant</SelectItem>
-//                   <SelectItem value="Autorisation de domicile">Autorisation de domicile</SelectItem>
-//                   <SelectItem value="Extrait de naissance">Extrait de naissance</SelectItem>
-//                   <SelectItem value="Certificat de mariage">Certificat de mariage</SelectItem>
-//                 </SelectContent>
-//               </Select>
-//               <Select value={categoryFIlter} onValueChange={setCategoryFilter}>
-//                 <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-//                   <SelectValue placeholder="Filtrer par catégorie" />
-//                 </SelectTrigger>
-//                 <SelectContent>
-//                   <SelectItem value="all">Toutes les catégories</SelectItem>
-//                   <SelectItem value="administrative">Administrative</SelectItem>
-//                   <SelectItem value="commerciale">Commerciale</SelectItem>
-//                   <SelectItem value="personnelle">Personnelle</SelectItem>
-//                 </SelectContent>
-//               </Select>
-//             </div>
-//           </CardContent>
-//         </Card>
-//         {/* Demandes List */}
-//         <Card className="shadow-sm border-gray-200">
-//           <CardHeader className="border-b border-gray-200">
-//             <CardTitle className="text-2xl font-semibold text-gray-900">
-//               Liste des demandes ({filteredDemandes.length})
-//             </CardTitle>
-//           </CardHeader>
-//           <CardContent className="p-0">
-//             <div className="overflow-x-auto">
-//               <table className="w-full">
-//                 <thead className="bg-gray-50 border-b border-gray-200">
-//                   <tr>
-//                     <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg">Type </th>
-//                     <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg hidden md:table-cell">
-//                       Envoyee le
-//                     </th>
-//                     <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg">Statut</th>
-//                     <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg hidden sm:table-cell">
-//                       Piece jointe
-//                     </th>
-//                     <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg hidden lg:table-cell">
-//                       Derniere mise à jour
-//                     </th>
-//                     <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg"></th>
-//                   </tr>
-//                 </thead>
-//                 <tbody>
-//                   {filteredDemandes.map((demande) => (
-//                     <tr
-//                       key={demande.id}
-//                       className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200"
-//                     >
-//                       <td className="py-4 px-4 md:px-6 text-gray-600 text-lg hidden md:table-cell">
-//                         <div className="flex items-center gap-1">
-//                           <Calendar className="w-4 h-4 text-gray-400" />
-//                           {demande.dateEnvoi}
-//                         </div>
-//                       </td>
-//                       <td className="py-4 px-4 md:px-6">
-//                         <div>
-//                           <p className="font-medium text-gray-900 text-lg">{demande.type}</p>
-//                           {/* <p className="text-md text-gray-500 mt-1 hidden sm:block">{demande.description}</p> */}
-//                         </div>
-//                       </td>
-//                       <td className="py-4 px-4 text-lg md:px-6">{getStatusBadge(demande.statut)}</td>
-//                       <td className="py-4 px-4 md:px-6 text-gray-600 text-lg hidden sm:table-cell font-mono">
-//                         <div className="flex items-center gap-1">
-//                           <Paperclip className="w-4 h-4 text-gray-400" />
-//                           05
-//                         </div>
-//                       </td>
-//                       <td className="py-4 px-4 md:px-6 text-gray-600 text-lg hidden lg:table-cell">
-//                         <div className="flex items-center gap-1">
-//                           <Calendar className="w-4 h-4 text-gray-400" />
-//                           {demande.dateLimite}
-//                         </div>
-//                       </td>
-//                       <td className="py-4 gap-3 px-4 md:px-6">
-//                         <Link href={`/dashboard/client/mes-demandes/${demande.id}`}>
-//                           <Button
-//                             variant="ghost"
-//                             size="sm"
-//                             className="bg-primary text-lg  text-white hover:bg-primary transition-colors duration-200"
-//                           >
-//                             Voir
-//                           </Button>
-//                         </Link>
-//                         <Button
-//                           variant="outline"
-//                           size="sm"
-//                           className="border-primary ml-2 text-primary hover:border-primary transition-colors duration-200 bg-transparent"
-//                         >
-//                           <Download className="w-4 h-4 " />
-//                         </Button>
-//                       </td>
-//                     </tr>
-//                   ))}
-//                 </tbody>
-//               </table>
-//             </div>
-//             {filteredDemandes.length === 0 && (
-//               <div className="text-center py-12">
-//                 <p className="text-gray-500 text-lg mb-4">Aucune demande trouvée</p>
-//                 <p className="text-gray-400 text-sm mb-6">Essayez de modifier vos critères de recherche</p>
-//                 <Button
-//                   className="bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200"
-//                   onClick={() => setIsModalOpen(true)} // Open modal on click
-//                 >
-//                   <Plus className="w-4 h-4 mr-2" />
-//                   Créer une nouvelle demande
-//                 </Button>
-//               </div>
-//             )}
-//           </CardContent>
-//         </Card>
-//       </div>
-//       {/* Add the modal component here */}
-//       <AddDemandeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleNewDemandeSubmit} />
-//     </div>
-//   )
-// }
 "use client"
-import { useState, useEffect } from "react"
-import Link from "next/link"
+
+import { useState } from "react"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Download, Plus, Calendar, Paperclip } from "lucide-react"
+import { FileText, Search, Eye, Upload, Calendar, Clock, CheckCircle, AlertCircle, Plus } from "lucide-react"
+import Link from "next/link"
+import { useMyServiceRequests } from "@/hooks/services-requests/use-service-request"
 import Sidebar from "@/components/sidebar"
-import { Demande } from "@/lib/types/demande"
-import { initialDemandes } from "@/lib/demande-data"
-import { AddDemandeModal } from "@/components/dd-demande-modal"
 
 
-export default function MesDemandesPage() {
-  const [isLoading, setIsLoading] = useState(true)
+export default function ClientRequestsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [typeFilter, setTypeFilter] = useState("all")
-  const [categoryFilter, setCategoryFilter] = useState("all") // Renamed for consistency
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [demandes, setDemandes] = useState<Demande[]>(initialDemandes) // Use initial data
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
-    return () => clearTimeout(timer)
-  }, [])
+  const { data: requestsData, isLoading } = useMyServiceRequests()
+  const requests = requestsData?.data || []
 
-  const getStatusBadge = (statut: string) => {
-    switch (statut) {
-      case "Terminé":
-        return <Badge className="bg-green-500 text-white hover:bg-green-500 px-3 py-1 text-xs">Terminé</Badge>
-      case "En cours":
-        return <Badge className="bg-blue-500 text-white hover:bg-blue-500 px-3 py-1 text-xs">En cours</Badge>
-      case "En attente":
-        return <Badge className="bg-orange-500 text-white hover:bg-orange-500 px-3 py-1 text-xs">En attente</Badge>
-      case "Rejeté":
-        return <Badge className="bg-red-500 text-white hover:bg-red-500 px-3 py-1 text-xs">Rejeté</Badge>
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "valide":
+        return <CheckCircle className="w-4 h-4 text-green-600" />
+      case "en_cours":
+        return <Clock className="w-4 h-4 text-blue-600" />
+      case "nouveau":
+        return <AlertCircle className="w-4 h-4 text-orange-600" />
       default:
-        return <Badge variant="secondary">{statut}</Badge>
+        return <FileText className="w-4 h-4 text-gray-600" />
     }
   }
 
-  const filteredDemandes = demandes.filter((demande) => {
-    const matchesSearch =
-      demande.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      demande.numero.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      demande.description.toLowerCase().includes(searchTerm.toLowerCase()) // Also search in description
-    const matchesStatus = statusFilter === "all" || demande.statut === statusFilter
-    const matchesType = typeFilter === "all" || demande.type === typeFilter
-    const matchesCategory =
-      categoryFilter === "all" || demande.description.toLowerCase().includes(categoryFilter.toLowerCase())
-    return matchesSearch && matchesStatus && matchesType && matchesCategory
-  })
-
-  const handleNewDemandeSubmit = (data: {
-    type: string
-    description: string
-    dateEnvoi: string
-    dateLimite: string
-    attachments: File[]
-  }) => {
-    const newId = (demandes.length > 0 ? Math.max(...demandes.map((d) => Number.parseInt(d.id))) + 1 : 1).toString() // Ensure unique ID
-    const newNumero = `${data.type.substring(0, 3).toUpperCase()}-${newId.padStart(3, "0")}` // More dynamic numero
-    const newDemande: Demande = {
-      id: newId,
-      type: data.type,
-      numero: newNumero,
-      statut: "En attente",
-      dateEnvoi: data.dateEnvoi,
-      dateLimite: data.dateLimite,
-      description: data.description,
-      attachmentsCount: data.attachments.length, // Use actual attachment count
-      details: `Détails pour la demande de type "${data.type}" soumise le ${data.dateEnvoi}.`, // Dynamic details
+  const getStatusBadge = (status: string) => {
+    const variants = {
+      valide: "bg-green-100 text-green-800 border-green-200",
+      en_cours: "bg-blue-100 text-blue-800 border-blue-200",
+      nouveau: "bg-orange-100 text-orange-800 border-orange-200",
+      traite: "bg-purple-100 text-purple-800 border-purple-200",
+      rejete: "bg-red-100 text-red-800 border-red-200",
     }
-    setDemandes((prevDemandes) => [...prevDemandes, newDemande])
-    setIsModalOpen(false)
-  }
 
-  if (isLoading) {
+    const labels = {
+      valide: "Validé",
+      en_cours: "En cours",
+      nouveau: "Nouveau",
+      traite: "Traité",
+      rejete: "Rejeté",
+    }
+
     return (
-      <div className="flex min-h-screen bg-gray-50">
-        <Sidebar />
-        <div className="flex-1 md:ml-64 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-        </div>
-      </div>
+      <Badge className={`${variants[status as keyof typeof variants] || "bg-gray-100 text-gray-800"} border`}>
+        {labels[status as keyof typeof labels] || status}
+      </Badge>
     )
   }
 
+  const getTypeLabel = (type: string) => {
+    const labels = {
+      rdv: "Rendez-vous",
+      partenariat: "Partenariat",
+      mariage: "Mariage",
+    }
+    return labels[type as keyof typeof labels] || type
+  }
+
+  const filteredRequests = requests?.filter((request: any) => {
+    const matchesSearch =
+      request?.demande?.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      getTypeLabel(request.type).toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === "all" || request.status === statusFilter
+    const matchesType = typeFilter === "all" || request.type === typeFilter
+
+    return matchesSearch && matchesStatus && matchesType
+  })
+
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-      <div className="flex-1 md:ml-64 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-6">
+      <Sidebar/>
+      <div className="ml-72 mx-auto">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-4">
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl md:text-4xl font-bold text-primary">Mes demandes</h1>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Mes Demandes</h1>
+            <p className="text-muted-foreground">Suivez l'état de vos demandes de services</p>
           </div>
-          <div className="flex gap-2">
-            <Button
-              className="bg-primary hover:bg-primary text-white text-lg transition-colors duration-200"
-              onClick={() => setIsModalOpen(true)}
-            >
+          <Link href="/dashboard/client/new-request">
+            <Button className="bg-primary hover:bg-primary/90">
               <Plus className="w-4 h-4 mr-2" />
-              Nouvelle demande
+              Nouvelle Demande
             </Button>
-          </div>
+          </Link>
         </div>
+
         {/* Filters */}
-        <Card className="shadow-sm border-gray-200 bg-gray-100 mb-6">
-          <CardContent className="p-4 md:p-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Rechercher une demande..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                />
+        <Card className="mb-6 shadow-lg border-0">
+          <CardContent className="p-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                  <Input
+                    placeholder="Rechercher par référence ou type..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 border-primary/20 focus:border-primary"
+                  />
+                </div>
               </div>
+
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                <SelectTrigger className="w-full md:w-48 border-primary/20 focus:border-primary">
                   <SelectValue placeholder="Filtrer par statut" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tous les statuts</SelectItem>
-                  <SelectItem value="Terminé">Terminé</SelectItem>
-                  <SelectItem value="En cours">En cours</SelectItem>
-                  <SelectItem value="En attente">En attente</SelectItem>
-                  <SelectItem value="Rejeté">Rejeté</SelectItem>
+                  <SelectItem value="nouveau">Nouveau</SelectItem>
+                  <SelectItem value="en_cours">En cours</SelectItem>
+                  <SelectItem value="valide">Validé</SelectItem>
+                  <SelectItem value="traite">Traité</SelectItem>
+                  <SelectItem value="rejete">Rejeté</SelectItem>
                 </SelectContent>
               </Select>
+
               <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                <SelectTrigger className="w-full md:w-48 border-primary/20 focus:border-primary">
                   <SelectValue placeholder="Filtrer par type" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tous les types</SelectItem>
-                  <SelectItem value="Certificat de résidence">Certificat de résidence</SelectItem>
-                  <SelectItem value="Carte de commerçant">Carte de commerçant</SelectItem>
-                  <SelectItem value="Autorisation de domicile">Autorisation de domicile</SelectItem>
-                  <SelectItem value="Extrait de naissance">Extrait de naissance</SelectItem>
-                  <SelectItem value="Certificat de mariage">Certificat de mariage</SelectItem>
-                  <SelectItem value="Autre">Autre</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                  <SelectValue placeholder="Filtrer par catégorie" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Toutes les catégories</SelectItem>
-                  <SelectItem value="administrative">Administrative</SelectItem>
-                  <SelectItem value="commerciale">Commerciale</SelectItem>
-                  <SelectItem value="personnelle">Personnelle</SelectItem>
+                  <SelectItem value="rdv">Rendez-vous</SelectItem>
+                  <SelectItem value="partenariat">Partenariat</SelectItem>
+                  <SelectItem value="mariage">Mariage</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </CardContent>
         </Card>
-        {/* Demandes List */}
-        <Card className="shadow-sm border-gray-200">
-          <CardHeader className="border-b border-gray-200">
-            <CardTitle className="text-2xl font-semibold text-gray-900">
-              Liste des demandes ({filteredDemandes.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg">Type </th>
-                    <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg hidden md:table-cell">
-                      Envoyee le
-                    </th>
-                    <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg">Statut</th>
-                    <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg hidden sm:table-cell">
-                      Piece jointe
-                    </th>
-                    <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg hidden lg:table-cell">
-                      Derniere mise à jour
-                    </th>
-                    <th className="text-left py-4 px-4 md:px-6 font-semibold text-gray-700 text-lg"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredDemandes.map((demande) => (
-                    <tr
-                      key={demande.id}
-                      className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200"
-                    >
-                      <td className="py-4 px-4 md:px-6 text-gray-600 text-lg hidden md:table-cell">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          {demande.dateEnvoi}
-                        </div>
-                      </td>
-                      <td className="py-4 px-4 md:px-6">
-                        <div>
-                          <p className="font-medium text-gray-900 text-lg">{demande.type}</p>
-                          <p className="text-md text-gray-500 mt-1 hidden sm:block">{demande.description}</p>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4 text-lg md:px-6">{getStatusBadge(demande.statut)}</td>
-                      <td className="py-4 px-4 md:px-6 text-gray-600 text-lg hidden sm:table-cell font-mono">
-                        <div className="flex items-center gap-1">
-                          <Paperclip className="w-4 h-4 text-gray-400" />
-                          {demande.attachmentsCount}
-                        </div>
-                      </td>
-                      <td className="py-4 px-4 md:px-6 text-gray-600 text-lg hidden lg:table-cell">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          {demande.dateLimite}
-                        </div>
-                      </td>
-                      <td className="py-4 gap-3 px-4 md:px-6">
-                        <Link href={`/dashboard/client/mes-demandes/${demande.id}`}>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="bg-primary text-lg  text-white hover:bg-primary transition-colors duration-200"
-                          >
-                            Voir
+
+        {/* Requests List */}
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Chargement de vos demandes...</p>
+          </div>
+        ) : filteredRequests?.length === 0 ? (
+          <Card className="shadow-lg border-0">
+            <CardContent className="p-12 text-center">
+              <FileText className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">Aucune demande trouvée</h3>
+              <p className="text-muted-foreground mb-6">
+                {searchTerm || statusFilter !== "all" || typeFilter !== "all"
+                  ? "Aucune demande ne correspond à vos critères de recherche."
+                  : "Vous n'avez pas encore fait de demande de service."}
+              </p>
+              <Link href="/client/new-request">
+                <Button className="bg-primary hover:bg-primary/90">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Créer ma première demande
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 gap-6">
+            {filteredRequests?.map((request: any) => (
+              <Card key={request.id} className="border rounded-[5px] hover:shadow-xl transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-4">
+                      {getStatusIcon(request.status)}
+                      <div>
+                        <h3 className="font-semibold text-lg text-foreground">{getTypeLabel(request.type)}</h3>
+                        <p className="text-sm text-muted-foreground">Réf: {request?.numeroReference}</p>
+                      </div>
+                    </div>
+                    {getStatusBadge(request.status)}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Calendar className="w-4 h-4" />
+                      <span>Créée le {new Date(request.createdAt).toLocaleDateString("fr-FR")}</span>
+                    </div>
+
+                    {request.treatments?.length > 0 && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Clock className="w-4 h-4" />
+                        <span>{request.treatments.length} traitement(s)</span>
+                      </div>
+                    )}
+
+                    {request.documents?.length > 0 && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <FileText className="w-4 h-4" />
+                        <span>{request.documents.length} document(s)</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-muted-foreground">
+                      Dernière mise à jour: {new Date(request.updatedAt).toLocaleDateString("fr-FR")}
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Link href={`/dashboard/client/mes-demandes/${request.id}`}>
+                        <Button variant="outline" size="sm" className="bg-transparent">
+                          <Eye className="w-4 h-4 mr-1" />
+                          Voir détails
+                        </Button>
+                      </Link>
+
+                      {request.status === "en_cours" && (
+                        <Link href={`/client/requests/${request.id}/documents`}>
+                          <Button variant="outline" size="sm" className="bg-transparent">
+                            <Upload className="w-4 h-4 mr-1" />
+                            Documents
                           </Button>
                         </Link>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="border-primary ml-2 text-primary hover:border-primary transition-colors duration-200 bg-transparent"
-                        >
-                          <Download className="w-4 h-4 " />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {filteredDemandes.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg mb-4">Aucune demande trouvée</p>
-                <p className="text-gray-400 text-sm mb-6">Essayez de modifier vos critères de recherche</p>
-                <Button
-                  className="bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Créer une nouvelle demande
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
-      <AddDemandeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleNewDemandeSubmit} />
     </div>
   )
 }

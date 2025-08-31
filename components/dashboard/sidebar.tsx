@@ -1,6 +1,6 @@
 "use client"
 
-import { useApp } from "@/providers/app-provider"
+
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import Image from "next/image"
 
 export function Sidebar() {
-  const { user, logout } = useApp()
+  
   const pathname = usePathname()
 
   const menuItems = [
@@ -53,7 +53,7 @@ export function Sidebar() {
             </div>
           </div>
           <div>
-            <p className="font-medium">Bonjour {user?.prenom}</p>
+            <p className="font-medium">Bonjour user</p>
             <p className="text-xs text-blue-200">Espace CITOYEN</p>
           </div>
         </div>
@@ -84,7 +84,7 @@ export function Sidebar() {
 
       <div className="p-4 border-t border-blue-700">
         <button
-          onClick={logout}
+         
           className="flex items-center gap-3 px-3 py-2 w-full text-left rounded-md text-blue-100 hover:bg-blue-700 transition-colors"
         >
           <LogOut className="h-5 w-5" />

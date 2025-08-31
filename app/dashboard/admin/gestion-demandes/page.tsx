@@ -1,83 +1,99 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Eye, Edit, Trash2 } from "lucide-react"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Search, Eye, Edit, Trash2, Filter, Download } from "lucide-react"
+import { useServiceRequests } from "@/hooks/services-requests/use-service-request"
+
 
 export default function GestionDemandesPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
+  const [typeFilter, setTypeFilter] = useState("all")
+  const [page, setPage] = useState(1)
 
-  const demandes = [
-    {
-      id: "1",
-      nomPrenom: "Koffi Stephane",
-      typeDemande: "Certificat de résidence",
-      dateDemande: "28/07/2024",
-      statut: "En cours",
-    },
-    {
-      id: "2",
-      nomPrenom: "Alioune Mamadou",
-      typeDemande: "Extrait d'acte de naissance",
-      dateDemande: "26/07/2024",
-      statut: "Validé",
-    },
-    {
-      id: "3",
-      nomPrenom: "Coulibaly Fatou",
-      typeDemande: "Attestation de domicile",
-      dateDemande: "25/07/2024",
-      statut: "Validé",
-    },
-  ]
+  const { data: demandesData, isLoading } = useServiceRequests({
+    page,
+    limit: 20,
+     //@ts-ignore
+    etat: statusFilter !== "all" ? statusFilter : undefined,
+     //@ts-ignore
+    type: typeFilter !== "all" ? typeFilter : undefined,
+  })
 
   const getStatusBadge = (statut: string) => {
     switch (statut) {
-      case "Validé":
-        return <Badge className="bg-green-500 text-white hover:bg-green-500 px-3 py-1 text-xs">Validé</Badge>
-      case "En cours":
+      case "validee":
+        return <Badge className="bg-green-500 text-white hover:bg-green-500 px-3 py-1 text-xs">Validée</Badge>
+      case "en_cours":
         return <Badge className="bg-blue-500 text-white hover:bg-blue-500 px-3 py-1 text-xs">En cours</Badge>
-      case "Refusé":
-        return <Badge className="bg-red-500 text-white hover:bg-red-500 px-3 py-1 text-xs">Refusé</Badge>
+      case "en_attente":
+        return <Badge className="bg-orange-500 text-white hover:bg-orange-500 px-3 py-1 text-xs">En attente</Badge>
+      case "refusee":
+        return <Badge className="bg-red-500 text-white hover:bg-red-500 px-3 py-1 text-xs">Refusée</Badge>
+      case "annulee":
+        return <Badge className="bg-gray-500 text-white hover:bg-gray-500 px-3 py-1 text-xs">Annulée</Badge>
       default:
         return <Badge variant="secondary">{statut}</Badge>
     }
   }
 
+  const getTypeLabel = (type: string) => {
+    switch (type) {
+      case "rdv":
+        return "Rendez-vous"
+      case "mariage":
+        return "Mariage"
+      case "partenariat":
+        return "Partenariat"
+      default:
+        return type
+    }
+  }
+
+  const filteredDemandes =
+    demandesData?.data?.filter((demande) => {
+      const matchesSearch =
+        demande.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        demande.prenom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        demande.numeroReference.toLowerCase().includes(searchTerm.toLowerCase())
+
+      return matchesSearch
+    }) || []
+
+  if (isLoading) {
+    return (
+      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
-      {/* Breadcrumb */}
-      {/* <div className="mb-6">
-        <nav className="text-sm text-gray-600">
-          <Link href="/admin" className="hover:text-blue-600">
-            Tableau de bord
-          </Link>
-          <span className="mx-2">›</span>
-          <span className="text-gray-900 font-medium">Suivi et traitement des demandes citoyennes</span>
-        </nav>
-      </div> */}
-
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-green-600 mb-7"><span className="text-primary">Suivi et traitement des</span> demandes citoyennes</h1>
+        <h1 className="text-3xl font-bold text-green-600 mb-7">
+          <span className="text-primary">Suivi et traitement des</span> demandes citoyennes
+        </h1>
 
         {/* Filters */}
         <div className="bg-primary text-white p-5 rounded-[10px] mb-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">Type de demande</label>
-              <Select>
+              <Select value={typeFilter} onValueChange={setTypeFilter}>
                 <SelectTrigger className="bg-white rounded-[7px] text-gray-900">
                   <SelectValue placeholder="Tous" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tous</SelectItem>
-                  <SelectItem value="certificat">Certificat</SelectItem>
-                  <SelectItem value="attestation">Attestation</SelectItem>
+                  <SelectItem value="rdv">Rendez-vous</SelectItem>
+                  <SelectItem value="mariage">Mariage</SelectItem>
+                  <SelectItem value="partenariat">Partenariat</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -90,9 +106,11 @@ export default function GestionDemandesPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tous</SelectItem>
-                  <SelectItem value="validé">Validé</SelectItem>
-                  <SelectItem value="en-cours">En cours</SelectItem>
-                  <SelectItem value="refusé">Refusé</SelectItem>
+                  <SelectItem value="en_attente">En attente</SelectItem>
+                  <SelectItem value="en_cours">En cours</SelectItem>
+                  <SelectItem value="validee">Validée</SelectItem>
+                  <SelectItem value="refusee">Refusée</SelectItem>
+                  <SelectItem value="annulee">Annulée</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -107,6 +125,7 @@ export default function GestionDemandesPage() {
                   <SelectItem value="all">Toutes</SelectItem>
                   <SelectItem value="today">Aujourd'hui</SelectItem>
                   <SelectItem value="week">Cette semaine</SelectItem>
+                  <SelectItem value="month">Ce mois</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -125,6 +144,23 @@ export default function GestionDemandesPage() {
             </div>
           </div>
         </div>
+
+        {/* Actions */}
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex gap-2">
+            <Button variant="outline" className="border-gray-300 bg-transparent">
+              <Download className="w-4 h-4 mr-2" />
+              Exporter
+            </Button>
+            <Button variant="outline" className="border-gray-300 bg-transparent">
+              <Filter className="w-4 h-4 mr-2" />
+              Filtres avancés
+            </Button>
+          </div>
+          <div className="text-sm text-gray-600">{
+             //@ts-ignore
+          demandesData?.total || 0} demande(s) au total</div>
+        </div>
       </div>
 
       {/* Table */}
@@ -135,21 +171,25 @@ export default function GestionDemandesPage() {
               <tr>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700 text-sm">Nom & Prénom</th>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700 text-sm">Type de demande</th>
+                <th className="text-left py-4 px-6 font-semibold text-gray-700 text-sm">Référence</th>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700 text-sm">Date de demande</th>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700 text-sm">Statut</th>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700 text-sm">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {demandes.map((demande, index) => (
+              {filteredDemandes.map((demande) => (
                 <tr key={demande.id} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="py-4 px-6 font-medium text-gray-900">{demande.nomPrenom}</td>
-                  <td className="py-4 px-6 text-gray-600">{demande.typeDemande}</td>
-                  <td className="py-4 px-6 text-gray-600">{demande.dateDemande}</td>
-                  <td className="py-4 px-6">{getStatusBadge(demande.statut)}</td>
+                  <td className="py-4 px-6 font-medium text-gray-900">
+                    {demande.nom} {demande.prenom}
+                  </td>
+                  <td className="py-4 px-6 text-gray-600">{getTypeLabel(demande.type)}</td>
+                  <td className="py-4 px-6 text-gray-600 font-mono text-sm">{demande.numeroReference}</td>
+                  <td className="py-4 px-6 text-gray-600">{new Date(demande.createdAt).toLocaleDateString()}</td>
+                  <td className="py-4 px-6">{getStatusBadge(demande.traitements[0].etat || demande.etat)}</td>
                   <td className="py-4 px-6">
                     <div className="flex items-center gap-2">
-                      <Link href={`/admin/gestion-demandes/${demande.id}`}>
+                      <Link href={`/dashboard/admin/requests/${demande.id}`}>
                         <Button variant="outline" size="sm" className="border-gray-300 bg-transparent">
                           <Eye className="w-4 h-4" />
                         </Button>
@@ -170,13 +210,33 @@ export default function GestionDemandesPage() {
 
         {/* Pagination */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 bg-gray-50">
-          <div className="text-sm text-gray-500">Précédent</div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setPage(Math.max(1, page - 1))}
+            disabled={page === 1}
+            className="bg-transparent"
+          >
+            Précédent
+          </Button>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="w-8 h-8 p-0 bg-transparent">
-              1
-            </Button>
+            <span className="text-sm text-gray-600">
+              Page {page} sur {
+                 //@ts-ignore
+              demandesData?.totalPages || 1}
+            </span>
           </div>
-          <div className="text-sm text-blue-600 cursor-pointer hover:text-blue-700">Suivant</div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setPage(page + 1)}
+            disabled={
+               //@ts-ignore
+              page >= (demandesData?.totalPages || 1)}
+            className="bg-transparent"
+          >
+            Suivant
+          </Button>
         </div>
       </div>
     </div>

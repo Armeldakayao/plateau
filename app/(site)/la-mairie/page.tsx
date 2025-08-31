@@ -443,6 +443,7 @@ import ValuesSection from "@/components/values-section";
 import InfiniteCarousel from "@/components/smooth-carousel";
 import StatsSection from "@/components/stats-section";
 import MairieSection from "@/components/mairie-section";
+import { useLandmarksQuery } from "@/hooks/places/use-places-queries";
 // import PageLoader from "@/components/page-loader"
 
 const fadeInUp = {
@@ -467,6 +468,7 @@ const scaleIn = {
 
 export default function LaMairie() {
   const [currentSlide, setCurrentSlide] = useState(0);
+const { data: landmarksData, isLoading: landmarksLoading } = useLandmarksQuery({ limit: 8 })
 
   return (
     <div title="La Mairie du Plateau">
@@ -596,7 +598,10 @@ export default function LaMairie() {
             {/* Timeline */}
             <AnimatedTimeline />
                         <h1 className="text-3xl text-center md:text-5xl font-bold text-primary my-16">Endroits mythiques</h1>
-            <InfiniteCarousel />
+             <InfiniteCarousel 
+          landmarks={landmarksData?.data} 
+          landmarksLoading={landmarksLoading}
+        />
             {/* Carrousel d'images */}
           </div>
         </motion.section>

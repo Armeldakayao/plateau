@@ -109,27 +109,28 @@
 // }
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { useApp } from "@/providers/app-provider";
+// import { useApp } from "@/providers/app-provider";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { useProfile } from "@/hooks";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { isAuthenticated } = useApp();
-
+  // const { isAuthenticated } = useApp();
+const {data:profileData}=useProfile()
   const menuItems = [
     { label: "Accueil", href: "/" },
     { label: "La Mairie", href: "/la-mairie" },
     { label: "Services Administratifs", href: "/services" },
 
     { label: "Actualités", href: "/actualites" },
-    { label: "Ou aller ?", href: "/ou-aller" },
+    { label: "Où aller ?", href: "/ou-aller" },
     // { label: "Contact", href: "/contact" },
   ];
 
@@ -257,7 +258,7 @@ export default function Header() {
               transition={{ delay: 0.8 }}
               className="flex items-center space-x-4"
             >
-              {!isAuthenticated ? (
+              {!profileData?.email ? (
                 <motion.div
                   animate={{ opacity: [1, 0.5, 1], scale: [1, 1.05, 1] }}
                   transition={{ duration: 1.5, repeat: Infinity }}

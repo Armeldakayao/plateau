@@ -1,334 +1,297 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { ArrowLeft, Download, MessageSquare, FileText, User, Clock, CheckCircle, Check } from "lucide-react"
+import { FileText, Calendar, User, Clock, CheckCircle, AlertCircle, Download, Upload, ArrowLeft } from "lucide-react"
+import Link from "next/link"
+
+import { useParams } from "next/navigation"
+import { useServiceRequest } from "@/hooks/services-requests/use-service-request"
 import Sidebar from "@/components/sidebar"
 
-export default function DetailDemandePage() {
+export default function RequestDetailPage() {
   const params = useParams()
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(true)
+  const requestId = params.id as string
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
-    return () => clearTimeout(timer)
-  }, [])
-
-  // Mock data - in real app, fetch based on params.id
-  const demande = {
-    id: params.id,
-    type: "Certificat de résidence",
-    numero: "LMJ-5-007",
-    statut: "Terminé",
-    dateEnvoi: "20/05/2024",
-    dateLimite: "27/05/2024",
-    dateTraitement: "25/05/2024",
-    description: "Demande de certificat de résidence pour démarches administratives auprès de la banque",
-    demandeur: {
-      nom: "Awa Coulibaly",
-      email: "awa.coulibaly@gmail.com",
-      telephone: "+225 07 88 46 67 23",
-      adresse: "Plateau Dokui, Abidjan",
-    },
-    documents: [
-      { nom: "Pièce d'identité", statut: "Validé", date: "20/05/2024" },
-      { nom: "Justificatif de domicile", statut: "Validé", date: "20/05/2024" },
-      { nom: "Formulaire de demande", statut: "Validé", date: "20/05/2024" },
-    ],
-    historique: [
-      { date: "25/05/2024", action: "Demande traitée et approuvée", statut: "Terminé", agent: "Marie Kouassi" },
-      { date: "22/05/2024", action: "Documents vérifiés", statut: "En cours", agent: "Jean Koffi" },
-      { date: "20/05/2024", action: "Demande soumise", statut: "En attente", agent: "Système" },
-    ],
-  }
-
-  const getStatusBadge = (statut: string) => {
-    switch (statut) {
-      case "Terminé":
-        return <Badge className="bg-green-500 text-white hover:bg-green-500 px-3 py-1">Terminé</Badge>
-      case "En cours":
-        return <Badge className="bg-blue-500 text-white hover:bg-blue-500 px-3 py-1">En cours</Badge>
-      case "En attente":
-        return <Badge className="bg-orange-500 text-white hover:bg-orange-500 px-3 py-1">En attente</Badge>
-      case "Rejeté":
-        return <Badge className="bg-red-500 text-white hover:bg-red-500 px-3 py-1">Rejeté</Badge>
+  const { data: request, isLoading } = useServiceRequest(requestId)
+console.log(request,"request");
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "valide":
+        return <CheckCircle className="w-5 h-5 text-green-600" />
+      case "en_cours":
+        return <Clock className="w-5 h-5 text-blue-600" />
+      case "nouveau":
+        return <AlertCircle className="w-5 h-5 text-orange-600" />
       default:
-        return <Badge variant="secondary">{statut}</Badge>
+        return <FileText className="w-5 h-5 text-gray-600" />
     }
   }
 
-  const handleDownload = () => {
-    console.log("Téléchargement du certificat")
+  const getStatusBadge = (status: string) => {
+    const variants = {
+      valide: "bg-green-100 text-green-800 border-green-200",
+      en_cours: "bg-blue-100 text-blue-800 border-blue-200",
+      nouveau: "bg-orange-100 text-orange-800 border-orange-200",
+      traite: "bg-purple-100 text-purple-800 border-purple-200",
+      rejete: "bg-red-100 text-red-800 border-red-200",
+    }
+
+    const labels = {
+      valide: "Validé",
+      en_cours: "En cours",
+      nouveau: "Nouveau",
+      traite: "Traité",
+      rejete: "Rejeté",
+    }
+
+    return (
+      <Badge
+        className={`${variants[status as keyof typeof variants] || "bg-gray-100 text-gray-800"} border text-sm px-3 py-1`}
+      >
+        {labels[status as keyof typeof labels] || status}
+      </Badge>
+    )
   }
 
-  const handleContact = () => {
-    console.log("Contacter le service")
-  }
-
-  const handlePrintReceipt = () => {
-    console.log("Imprimer le reçu")
+  const getTypeLabel = (type: string) => {
+    const labels = {
+      rdv: "Rendez-vous",
+      partenariat: "Partenariat",
+      mariage: "Mariage",
+    }
+    return labels[type as keyof typeof labels] || type
   }
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen bg-gray-50">
-        <Sidebar />
-        <div className="flex-1 md:ml-64 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Chargement des détails...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (!request) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-6">
+        <div className="max-w-4xl mx-auto">
+          <Card className="shadow-lg border-0">
+            <CardContent className="p-12 text-center">
+              <FileText className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">Demande introuvable</h3>
+              <p className="text-muted-foreground mb-6">Cette demande n'existe pas ou vous n'y avez pas accès.</p>
+              <Link href="/client/requests">
+                <Button className="bg-primary hover:bg-primary/90">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Retour à mes demandes
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-6">
       <Sidebar />
-      <div className="flex-1 md:ml-64 p-4 md:p-8">
+      <div className="ml-72 mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <Button
-           
-            size="sm"
-            onClick={() => router.back()}
-            className=" text-white hover:bg-primary text-lg p-2 bg-primary transition-colors duration-200"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Retour à mes demandes
-          </Button>
-         
-        </div>
-<div
-  className="relative p-8 w-full text-center mb-6 bg-cover bg-center rounded-lg"
-  style={{ backgroundImage: "url('/images/bg-demande.svg')" }}
->
-  {/* Overlay sombre pour lisibilité */}
-  <div className="absolute inset-0 bg-black/10 rounded-lg"></div>
-
-  {/* Contenu au-dessus de l'overlay */}
-  <div className="relative z-10">
-    <h1 className="text-2xl md:text-5xl font-bold text-white">Détail de la demande</h1>
-    <p className="text-gray-700">Numéro: {demande.numero}</p>
-  </div>
-</div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Informations générales */}
-            <Card className="shadow-sm border-orange-400">
-
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="">
-                    <h4 className="font-bold text-orange-500 text-xl mb-3">Recaptulatif de la demande</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Type de demande:</span>
-                        <span className="text-lg text-gray-500">{demande.type}</span>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Date de depot :</span>
-                        <span className="text-lg text-gray-500">{demande.dateEnvoi}</span>
-                      </div>
-                       <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Numero de dossier :</span>
-                        <span className="text-lg text-gray-500">{demande.numero}</span>
-                      </div>
-                       <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Statut de la demande :</span>
-                        <span className="text-lg text-secondary">{demande.statut}</span>
-                      </div>
-                      {demande.dateTraitement && (
-                         <div className="flex gap-2 items-center">
-                        <span className="text-black text-lg">Prochain etape :</span>
-                        <span className="text-lg text-gray-700">Payement a effectuer</span> <span className="font-medium">{demande.dateTraitement}</span>
-                      </div>
-                      )}
-                      <Button className="mt-3 text-lg text-white bg-secondary" variant="default" ><Download className="w-4 h-4 mr-2" />Telecharger toutes les pieces</Button>
-                    </div>
-                  </div>
-                 
-                </div>
-               
-              </CardContent>
-            </Card>
-               <Card className="shadow-sm border-orange-400">
-
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="">
-                    <h4 className="font-bold text-orange-500 text-xl mb-3">Futur epoux</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Conjoint 1 :</span>
-                        <span className="text-lg text-gray-500">KOUASSI Jean-Cédric</span>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Conjoint 2 :</span>
-                        <span className="text-lg text-gray-500">KONE Mariam</span>
-                      </div>
-                       <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Adresse Commune :</span>
-                        <span className="text-lg text-gray-500">Abidjan</span>
-                      </div>
-                       <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Telephone :</span>
-                        <span className="text-lg text-secondary">+225 07 08 09 10</span>
-                      </div>
-                       <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Email :</span>
-                        <span className="text-lg text-secondary">LxI3o@example.com</span>
-                      </div>
-                      
-                      
-                    </div>
-                  </div>
-                 
-                </div>
-               
-              </CardContent>
-            </Card>
-               <Card className="shadow-sm border-secondary">
-
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="">
-                    <h4 className="font-bold text-secondary text-xl mb-3">Piece jointe</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex gap-2 items-center">
-                        <span className="text-gray-400 text-lg">Acte de naissance :</span>
-                        <span className="text-lg text-gray-500"><Check className="w-5 h-5 text-gray-500" /></span>
-                      </div>
-                       <div className="flex gap-2 items-center">
-                        <span className="text-gray-400 text-lg">Certificat de naissance :</span>
-                        <span className="text-lg text-gray-500"><Check className="w-5 h-5 text-gray-500" /></span>
-                      </div>
-                       <div className="flex gap-2 items-center">
-                        <span className="text-gray-400 text-lg">Acte de mariage :</span>
-                        <span className="text-lg text-gray-500"><Check className="w-5 h-5 text-gray-500" /></span>
-                      </div>
-                       <div className="flex gap-2 items-center">
-                        <span className="text-gray-400 text-lg">Certificat de mariage :</span>
-                        <span className="text-lg text-gray-500"><Check className="w-5 h-5 text-gray-500" /></span>
-                      </div>
-                      <Button className="mt-3 text-lg text-white bg-secondary" variant="default" ><Download className="w-4 h-4 mr-2" />Telecharger toutes les pieces</Button>
-                      
-                    </div>
-                  </div>
-                 
-                </div>
-               
-              </CardContent>
-            </Card>
-            {/* Documents */}
-            {/* <Card className="shadow-sm border-gray-200">
-              <CardHeader className="border-b border-gray-200">
-                <CardTitle className="text-xl font-semibold text-gray-900">Documents fournis</CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  {demande.documents.map((doc, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
-                    >
-                      <div className="flex items-center gap-3">
-                        <FileText className="w-5 h-5 text-blue-500" />
-                        <div>
-                          <p className="font-medium text-gray-900">{doc.nom}</p>
-                          <p className="text-sm text-gray-500">Soumis le {doc.date}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Badge className="bg-green-500 text-white hover:bg-green-500 px-2 py-1 text-xs">
-                          {doc.statut}
-                        </Badge>
-                        <Button variant="outline" size="sm" className="border-gray-300 bg-transparent hover:bg-gray-50">
-                          <Download className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card> */}
-            <Card className="shadow-sm border-orange-400">
-
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="">
-                    <h4 className="font-bold text-orange-500 text-xl mb-3">Details de la ceremonie</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Date demandee:</span>
-                        <span className="text-lg text-primary">12 juillet 2024</span>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Heure:</span>
-                        <span className="text-lg text-primary">9h00</span>
-                      </div>
-                       <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Lieu de la ceremonie :</span>
-                        <span className="text-lg text-primary">Centre de mariage</span>
-                      </div>
-                       <div className="flex gap-2 items-center">
-                        <span className="text-primary text-lg">Montant :</span>
-                        <span className="text-lg text-primary">6832 FCFA</span>
-                      </div>
-                    
-                      
-                    </div>
-                  </div>
-                 
-                </div>
-               
-              </CardContent>
-            </Card>
-            {/* Historique */}
-          
-          </div>
-
-          {/* Sidebar Actions */}
-          <div className="space-y-6">
-            <Card className="shadow-sm border-gray-200">
-              <CardHeader className="border-b border-gray-200 bg-primary rounded-t-lg">
-                <CardTitle className="text-xl  text-white text-center font-bold">Historique / Suivi</CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  {demande.historique.map((etape, index) => (
-                    <div key={index} className="flex items-start gap-4">
-                      <div className="flex-shrink-0 mt-1">
-                        {index === 0 ? (
-                          <CheckCircle className="w-5 h-5 text-green-500" />
-                        ) : (
-                          <Clock className="w-5 h-5 text-gray-400" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <p className="font-medium text-gray-900">{etape.action}</p>
-                          <span className="text-sm text-gray-500">{etape.date}</span>
-                        </div>
-                        <div className="flex items-center gap-2 mt-1">
-                         
-                          <span className="text-sm text-gray-500">12 juillet 2024</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+        <div className="flex items-center gap-4 mb-8">
+          <Link href="/dashboard/client/mes-demandes">
+            <Button variant="outline" size="sm" className="bg-transparent">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Retour
+            </Button>
+          </Link>
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold text-foreground mb-2">Détails de la demande</h1>
+            <p className="text-muted-foreground">Référence: {
+               //@ts-ignore
+            request.numeroReference}</p>
           </div>
         </div>
+
+        {/* Request Overview */}
+        <Card className="shadow-lg border-0 mb-6">
+          <CardHeader className="bg-gradient-to-r from-primary to-secondary text-white">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                { //@ts-ignore
+                getStatusIcon(request.status)}
+                <div>
+                  <CardTitle className="text-xl">{
+                     //@ts-ignore
+                  getTypeLabel(request.type)}</CardTitle>
+                  <p className="text-white/80">Créée le {
+                     //@ts-ignore
+                  new Date(request.createdAt).toLocaleDateString("fr-FR")}</p>
+                </div>
+              </div>
+              { //@ts-ignore
+              getStatusBadge(request.status)}
+            </div>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="flex items-center gap-3">
+                <Calendar className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="font-medium">Date de création</p>
+                  <p className="text-sm text-muted-foreground">
+                    { //@ts-ignore
+                    new Date(request.createdAt).toLocaleDateString("fr-FR")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Clock className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="font-medium">Dernière mise à jour</p>
+                  <p className="text-sm text-muted-foreground">
+                    { //@ts-ignore
+                    new Date(request.updatedAt).toLocaleDateString("fr-FR")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <FileText className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="font-medium">Documents</p>
+                  <p className="text-sm text-muted-foreground">{
+                     //@ts-ignore
+                  request.documents?.length || 0} fichier(s)</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Request Data */}
+        <Card className="shadow-lg border-0 mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <User className="w-5 h-5" />
+              Informations de la demande
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="space-y-4">
+              { //@ts-ignore
+              request.demande &&
+               //@ts-ignore
+                Object.entries(request.demande).map(([key, value]) => (
+                  <div key={key} className="flex justify-between py-2 border-b border-border last:border-0">
+                    <span className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1").toLowerCase()}:</span>
+                    <span className="text-muted-foreground">{String(value)}</span>
+                  </div>
+                ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Treatments */}
+        { //@ts-ignore
+        request.traitements && request.traitements.length > 0 && (
+          <Card className="shadow-lg border-0 mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="w-5 h-5" />
+                Historique des traitements
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-4">
+                { //@ts-ignore
+                request.traitements.map((treatment: any, index: number) => (
+                  <div key={treatment.id} className="p-4 border border-border rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold">Traitement #{index + 1}</h4>
+                      <Badge variant="outline">{treatment.etat}</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Agent: {treatment.agentNom} {treatment.agentPrenom}
+                    </p>
+                    {treatment.messageAgent && (
+                      <p className="text-sm bg-muted/50 p-3 rounded">{treatment.messageAgent}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground mt-2">
+                      {new Date(treatment.createdAt).toLocaleDateString("fr-FR")}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Documents */}
+        { //@ts-ignore
+        request.documents && request.documents.length > 0 && (
+          <Card className="shadow-lg border-0 mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                Documents
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                { //@ts-ignore
+                request.documents.map((document: any) => (
+                  <div key={document.id} className="p-4 border border-border rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium">{document.nom}</h4>
+                        <p className="text-sm text-muted-foreground">{document.type}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(document.createdAt).toLocaleDateString("fr-FR")}
+                        </p>
+                      </div>
+                      <Button variant="outline" size="sm">
+                        <Download className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Actions */}
+        <Card className="shadow-lg border-0">
+          <CardContent className="p-6">
+            <div className="flex flex-col sm:flex-row gap-4">
+              { //@ts-ignore
+              request.status === "en_cours" && (
+                 //@ts-ignore
+                <Link href={`/client/requests/${request.id}/documents`} className="flex-1">
+                  <Button className="w-full bg-primary hover:bg-primary/90">
+                    <Upload className="w-4 h-4 mr-2" />
+                    Ajouter des documents
+                  </Button>
+                </Link>
+              )}
+
+              <Link href="/client/requests" className="flex-1">
+                <Button variant="outline" className="w-full bg-transparent">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Retour à mes demandes
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

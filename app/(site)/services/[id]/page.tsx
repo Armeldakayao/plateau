@@ -1021,9 +1021,7 @@ import { ArrowLeft, Clock, FileTextIcon, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { getServiceById } from "@/lib/services-data"
-import RendezVousForm from "@/components/rendez-vous-form"
-import MariageForm from "@/components/mariage-form"
-import PartenariatForm from "@/components/partenariat-form"
+
 
 export default function ServiceDetail() {
   const params = useParams()
@@ -1172,35 +1170,44 @@ export default function ServiceDetail() {
       case "rendez-vous":
         case "demander-rendez-vous":
         return (
-          <RendezVousForm
-            onSubmit={onSubmit}
-            isSubmitting={isSubmitting}
-            files={files}
-            handleFileUpload={handleFileUpload}
-            removeFile={removeFile}
-          />
+          <div className="text-center bg-blue-50 p-10 rounded-xl">
+            <p className="text-2xl mb-6 font-semibold">Formulaire de demande de rendez-vous</p>
+            <p className="mb-4">Pour prendre rendez-vous, veuillez vous connecter sur  votre espace personnel</p>
+            <p className="text-xl font-bold mb-6">ou cliquez sur le bouton ci-dessous</p>
+            <Link href="/dashboard/client/new-request/rdv">
+              <Button className="bg-primary text-white px-8 py-4 text-lg rounded hover:bg-primary">
+                Faire ma demande de rendez-vous
+              </Button>
+            </Link>
+          </div>
         )
       case "mariage":
         case "acte-mariage":
         return (
-          <MariageForm
-            onSubmit={onSubmit}
-            isSubmitting={isSubmitting}
-            files={files}
-            handleFileUpload={handleFileUpload}
-            removeFile={removeFile}
-          />
+         <div className="text-center bg-blue-50 p-10 rounded-xl">
+            <p className="text-2xl mb-6 font-semibold">Formulaire de demande de mariage</p>
+            <p className="mb-4">Pour faire une demande de mariage, veuillez vous connecter sur  votre espace personnel</p>
+            <p className="text-xl font-bold mb-6">ou cliquez sur le bouton ci-dessous</p>
+            <Link href="/dashboard/client/new-request/mariage">
+              <Button className="bg-primary text-white px-8 py-4 text-lg rounded hover:bg-primary">
+                Faire ma demande de mariage
+              </Button>
+            </Link>
+          </div>
         )
       case "partenariat":
         case "demander-partenariat":
         return (
-          <PartenariatForm
-            onSubmit={onSubmit}
-            isSubmitting={isSubmitting}
-            files={files}
-            handleFileUpload={handleFileUpload}
-            removeFile={removeFile}
-          />
+         <div className="text-center bg-blue-50 p-10 rounded-xl">
+            <p className="text-2xl mb-6 font-semibold">Formulaire de demande de partenariat</p>
+            <p className="mb-4">Pour faire une demande de partenariat, veuillez vous connecter sur  votre espace personnel</p>
+            <p className="text-xl font-bold mb-6">ou cliquez sur le bouton ci-dessous</p>
+            <Link href="/dashboard/client/new-request/partenariat">
+              <Button className="bg-primary text-white px-8 py-4 text-lg rounded hover:bg-primary">
+                Faire ma demande de partenariat
+              </Button>
+            </Link>
+          </div>
         )
       default:
         return <p className="text-red-500">Formulaire non disponible pour ce service.</p>

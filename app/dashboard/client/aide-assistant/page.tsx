@@ -169,27 +169,19 @@ export default function AdvancedChatAssistant() {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <Sidebar/>
-     <div className="flex-1 md:ml-64 p-4 md:p-8">
+     
+     <div className="flex-1 p-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-3xl font-bold  text-gray-900 mb-2">Aide & Assistant</h1>
            
           </div>
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" className="relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-            </Button>
-            <Button variant="outline" size="icon">
-              <User className="w-5 h-5" />
-            </Button>
-          </div>
+         
         </div>
 
         {/* Chat Container */}
-        <Card className="h-[calc(100vh-150px)] border-none flex flex-col ">
+        <Card className="h-[calc(100vh-150px)] border flex flex-col ">
           <CardContent className="flex-1 rounded-lg flex flex-col p-0 overflow-hidden">
            
             {/* Messages Container */}

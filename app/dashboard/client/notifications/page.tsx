@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Bell, Search, Filter, Trash2, Check, CheckCheck, Calendar, MessageSquare, AlertCircle } from 'lucide-react'
 import Sidebar from "@/components/sidebar"
+import NotificationCenter from "@/components/dashboard/notifications-center"
 
 interface Notification {
   id: string
@@ -196,177 +197,10 @@ export default function NotificationsPage() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-      <div className="flex-1 md:ml-64 p-4 md:p-8">
+     
+      <div className="flex-1 ">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-4">
-          <div>
-            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">
-              Notifications
-              {unreadCount > 0 && (
-                <Badge className="bg-red-500 text-white hover:bg-red-500 ml-3">
-                  {unreadCount} non lues
-                </Badge>
-              )}
-            </h1>
-           
-          </div>
-          <div className="flex gap-2">
-            {selectedNotifications.length > 0 && (
-              <Button
-                variant="outline"
-                className="border-red-600 text-red-600 hover:bg-red-50 bg-transparent transition-colors duration-200"
-                onClick={handleDeleteSelected}
-              >
-                <Trash2 className="w-4 h-4 mr-2" />
-                Supprimer ({selectedNotifications.length})
-              </Button>
-            )}
-            <Button
-              className="bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200"
-              onClick={handleMarkAllAsRead}
-              disabled={unreadCount === 0}
-            >
-              <CheckCheck className="w-4 h-4 mr-2" />
-              Tout marquer comme lu
-            </Button>
-          </div>
-        </div>
-
-        {/* Filters */}
-        <Card className="shadow-sm border-gray-200 mb-6">
-          <CardContent className="p-4 md:p-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Rechercher une notification..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                  <SelectValue placeholder="Filtrer par type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tous les types</SelectItem>
-                  <SelectItem value="info">Information</SelectItem>
-                  <SelectItem value="success">Succès</SelectItem>
-                  <SelectItem value="warning">Attention</SelectItem>
-                  <SelectItem value="error">Erreur</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                  <SelectValue placeholder="Filtrer par statut" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Toutes</SelectItem>
-                  <SelectItem value="unread">Non lues</SelectItem>
-                  <SelectItem value="read">Lues</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button
-                variant="outline"
-                className="border-gray-300 text-gray-600 hover:bg-gray-50 bg-transparent transition-colors duration-200"
-                onClick={handleSelectAll}
-              >
-                <Filter className="w-4 h-4 mr-2" />
-                {selectedNotifications.length === filteredNotifications.length ? "Désélectionner tout" : "Sélectionner tout"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Notifications List */}
-        <div className="shadow-none border-none">
-          <div className="">
-            <div className="text-2xl font-semibold text-gray-900">
-              Liste des notifications ({filteredNotifications.length})
-            </div>
-          </div>
-          <div className="p-0 flex flex-col space-y-4 mt-4">
-            {filteredNotifications.length === 0 ? (
-              <div className="text-center py-12">
-                <Bell className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500 text-lg mb-2">Aucune notification trouvée</p>
-                <p className="text-gray-400 text-sm">Essayez de modifier vos critères de recherche</p>
-              </div>
-            ) : (
-              <div className=" spcace-y-7 gap-7 flex flex-col ">
-                {filteredNotifications.map((notification) => (
-                  <div
-                    key={notification.id}
-                    className={`p-4 md:p-6 border border-primary rounded-lg hover:bg-gray-50 transition-colors duration-200 ${
-                      !notification.isRead ? "bg-blue-50/30" : ""
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <input
-                        type="checkbox"
-                        checked={selectedNotifications.includes(notification.id)}
-                        onChange={() => handleSelectNotification(notification.id)}
-                        className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <div className="flex-shrink-0 mt-1">
-                        {getTypeIcon(notification.type)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-4 mb-2">
-                          <div className="flex items-center gap-2">
-                            <h3 className={`font-semibold text-xl text-gray-900 ${!notification.isRead ? "font-bold" : ""}`}>
-                              {notification.titre}
-                            </h3>
-                            {!notification.isRead && (
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                            )}
-                          </div>
-                          {/* <div className="flex items-center gap-2 flex-shrink-0">
-                            {getTypeBadge(notification.type)}
-                            {getPriorityBadge(notification.priority)}
-                          </div> */}
-                        </div>
-                        <p className="text-gray-600 text-md mb-3 leading-relaxed">
-                          {notification.message}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1 text-md text-gray-500">
-                            <Calendar className="w-3 h-3" />
-                            {notification.date}
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {!notification.isRead && (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="border-blue-600 text-blue-600 hover:bg-blue-50 bg-transparent text-xs transition-colors duration-200"
-                                onClick={() => handleMarkAsRead(notification.id)}
-                              >
-                                <Check className="w-3 h-3 mr-1" />
-                                Marquer comme lu
-                              </Button>
-                            )}
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="border-red-600 text-red-600 hover:bg-red-50 bg-transparent text-xs transition-colors duration-200"
-                              onClick={() => handleDelete(notification.id)}
-                            >
-                              <Trash2 className="w-3 h-3 mr-1" />
-                              Supprimer
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+       <NotificationCenter/>
       </div>
     </div>
   )

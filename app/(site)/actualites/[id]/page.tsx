@@ -1,23 +1,37 @@
 "use client"
 import { useParams, useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { ArrowLeft, Calendar, User, Tag, Share2, Facebook, Twitter, Linkedin } from "lucide-react"
+import { ArrowLeft, Calendar, User, Tag, Share2, Facebook, Twitter, Linkedin, MessageCircle, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
 import Link from "next/link"
-import { getNewsById, newsData } from "@/lib/news-data"
+import { useState } from "react"
+import { useCommunique, useCommuniques } from "@/hooks/communiques/use-communiques-queries"
+import { useAddComment } from "@/hooks/communiques/use-communiques-mutation"
+import { getImageUrl } from "@/lib/api/client"
+
+
 
 export default function ActualiteDetail() {
   const params = useParams()
   const router = useRouter()
   const articleId = params.id as string
 
-  const article = getNewsById(articleId)
+  const { data: article, isLoading, error } = useCommunique(articleId)
+  const { data: relatedArticlesData } = useCommuniques({
+     //@ts-ignore
+    type: article?.type,
+    limit: 3,
+  })
 
-  // Articles similaires (même catégorie, excluant l'article actuel)
-  const relatedArticles = newsData.filter((a) => a.category === article?.category && a.id !== articleId).slice(0, 3)
+  const [newComment, setNewComment] = useState("")
+  const addCommentMutation = useAddComment()
+
+  // Filter related articles (same type, excluding current article)
+  const relatedArticles = relatedArticlesData?.data?.filter((a) => a.id !== articleId)?.slice(0, 3) || []
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -36,7 +50,32 @@ export default function ActualiteDetail() {
     visible: { opacity: 1, y: 0 },
   }
 
-  if (!article) {
+  const handleAddComment = async () => {
+    if (!newComment.trim() || !articleId) return
+
+    try {
+      await addCommentMutation.mutateAsync({
+        id: articleId,
+        data: { comment: newComment.trim() },
+      })
+      setNewComment("")
+    } catch (error) {
+      console.error("Error adding comment:", error)
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-xl text-gray-600">Chargement de l'article...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !article) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
@@ -55,6 +94,7 @@ export default function ActualiteDetail() {
 
   const handleShare = (platform: string) => {
     const url = window.location.href
+     //@ts-ignore
     const title = article.title
 
     let shareUrl = ""
@@ -75,8 +115,18 @@ export default function ActualiteDetail() {
     }
   }
 
+  const getCategoryLabel = (type: string) => {
+    const typeMap: { [key: string]: string } = {
+      communique: "Communiqué officiel",
+      press_release: "Communiqué de presse",
+      news: "Actualités",
+      announcement: "Annonces",
+    }
+    return typeMap[type] || "Actualités"
+  }
+
   return (
-    <div className="min-h-screen  bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <motion.div
         initial="hidden"
         animate="visible"
@@ -94,28 +144,45 @@ export default function ActualiteDetail() {
         {/* Article Header */}
         <motion.div variants={itemVariants} className="mb-8">
           <div className="mb-4">
-            <Badge className="bg-green-600 text-white text-lg px-4 py-2 rounded-[4px]">{article.category}</Badge>
+            <Badge className="bg-green-600 text-white text-lg px-4 py-2 rounded-[4px]">
+              { //@ts-ignore
+              getCategoryLabel(article.type)}
+            </Badge>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6 leading-tight">{article.title}</h1>
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6 leading-tight">{
+             //@ts-ignore
+          article.title}</h1>
           <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-6">
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              <span className="text-lg">{article.date}</span>
+              <span className="text-lg">{
+                 //@ts-ignore
+              new Date(article.date).toLocaleDateString("fr-FR")}</span>
             </div>
             <div className="flex items-center gap-2">
               <User className="h-5 w-5" />
-              <span className="text-lg">{article.author}</span>
+              <span className="text-lg">Mairie du Plateau</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-lg">{
+                 //@ts-ignore
+              article.viewCount} vues</span>
             </div>
           </div>
-          <p className="text-xl text-gray-600 leading-relaxed max-w-4xl">{article.description}</p>
+          <p className="text-xl text-gray-600 leading-relaxed max-w-4xl">{
+             //@ts-ignore
+          article.description}</p>
         </motion.div>
 
         {/* Article Image */}
         <motion.div variants={itemVariants} className="mb-12">
           <div className="relative h-[400px] md:h-[600px] rounded-xl overflow-hidden shadow-lg">
             <Image
-              src={article.imageSrc || "/placeholder.svg"}
-              alt={article.title}
+              src={
+                 //@ts-ignore
+                getImageUrl(article.poster) || "/placeholder.svg"}
+              alt={ //@ts-ignore
+                article.title}
               fill
               className="object-cover"
               priority
@@ -127,29 +194,44 @@ export default function ActualiteDetail() {
           {/* Article Content */}
           <motion.div variants={itemVariants} className="lg:col-span-2">
             <div className="bg-white rounded-xl shadow-sm p-8 md:p-12">
-              <div
-                className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
-                dangerouslySetInnerHTML={{
-                  __html: article.content
-                    .replace(/\n\n/g, "</p><p>")
-                    .replace(/\n/g, "<br>")
-                    .replace(/## (.*)/g, '<h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">$1</h2>')
-                    .replace(/### (.*)/g, '<h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3">$1</h3>')
-                    .replace(/- (.*)/g, '<li class="mb-2">$1</li>')
-                    .replace(/<li/g, '<ul class="list-disc pl-6 mb-4"><li')
-                    .replace(/<\/li>(?!.*<li)/g, "</li></ul>"),
-                }}
-              />
+              <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                <div 
+                 //@ts-ignore
+                dangerouslySetInnerHTML={{ __html: article.details.replace(/\n/g, "<br>") }} />
+              </div>
+
+              {/* Gallery */}
+              { //@ts-ignore
+              article.gallery && article.gallery.length > 0 && (
+                <div className="mt-12">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-6">Galerie</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    { //@ts-ignore
+                    article.gallery.map((imageUrl, index) => (
+                      <div key={index} className="relative h-64 rounded-lg overflow-hidden">
+                        <Image
+                          src={getImageUrl(imageUrl) || "/placeholder.svg"}
+                          alt={`Image ${index + 1}`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Tags */}
-              {article.tags && article.tags.length > 0 && (
+              { //@ts-ignore
+              article.tags && article.tags.length > 0 && (
                 <div className="mt-12 pt-8 border-t border-gray-200">
                   <div className="flex items-center gap-2 mb-4">
                     <Tag className="h-5 w-5 text-gray-500" />
                     <span className="text-gray-500 font-medium">Tags :</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {article.tags.map((tag, index) => (
+                    { //@ts-ignore
+                    article.tags.map((tag, index) => (
                       <Badge
                         key={index}
                         variant="secondary"
@@ -161,6 +243,59 @@ export default function ActualiteDetail() {
                   </div>
                 </div>
               )}
+
+              <div className="mt-12 pt-8 border-t border-gray-200">
+                <div className="flex items-center gap-2 mb-6">
+                  <MessageCircle className="h-5 w-5 text-gray-500" />
+                  <h3 className="text-xl font-bold text-gray-800">Commentaires ({
+                     //@ts-ignore
+                  article.comments?.length || 0})</h3>
+                </div>
+
+                {/* Add Comment Form */}
+                <div className="mb-8 p-4 bg-gray-50 rounded-lg">
+                  <Textarea
+                    placeholder="Ajouter un commentaire..."
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    className="mb-4"
+                    rows={3}
+                  />
+                  <Button
+                    onClick={handleAddComment}
+                    disabled={!newComment.trim() || addCommentMutation.isPending}
+                    className="bg-primary text-white"
+                  >
+                    <Send className="mr-2 h-4 w-4" />
+                    {addCommentMutation.isPending ? "Envoi..." : "Publier le commentaire"}
+                  </Button>
+                </div>
+
+                {/* Comments List */}
+                <div className="space-y-4">
+                  { //@ts-ignore
+                  article.comments && article.comments.length > 0 ? (
+                     //@ts-ignore
+                    article.comments.map((comment, index) => (
+                      <div key={index} className="p-4 bg-white border border-gray-200 rounded-lg">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                            <User className="h-4 w-4 text-white" />
+                          </div>
+                          <span className="font-medium text-gray-800">Citoyen</span>
+                          <span className="text-sm text-gray-500">•</span>
+                          <span className="text-sm text-gray-500">Maintenant</span>
+                        </div>
+                        <p className="text-gray-700">{comment}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500 text-center py-8">
+                      Aucun commentaire pour le moment. Soyez le premier à commenter !
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           </motion.div>
 
@@ -210,7 +345,7 @@ export default function ActualiteDetail() {
                       <div className="flex gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
                         <div className="relative w-20 h-16 rounded-md overflow-hidden flex-shrink-0">
                           <Image
-                            src={relatedArticle.imageSrc || "/placeholder.svg"}
+                            src={relatedArticle.poster || "/placeholder.svg"}
                             alt={relatedArticle.title}
                             fill
                             className="object-cover"
@@ -220,7 +355,9 @@ export default function ActualiteDetail() {
                           <h4 className="font-medium text-gray-800 group-hover:text-primary transition-colors line-clamp-2 text-sm leading-tight">
                             {relatedArticle.title}
                           </h4>
-                          <p className="text-xs text-gray-500 mt-1">{relatedArticle.date}</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {new Date(relatedArticle.date).toLocaleDateString("fr-FR")}
+                          </p>
                         </div>
                       </div>
                     </Link>
@@ -268,7 +405,9 @@ export default function ActualiteDetail() {
               </Button>
             </Link>
             <div className="text-sm text-gray-500">
-              Article publié le {article.date} par {article.author}
+              Article publié le {
+                 //@ts-ignore
+              new Date(article.date).toLocaleDateString("fr-FR")} par Mairie du Plateau
             </div>
           </div>
         </motion.div>

@@ -150,6 +150,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel"
+import { getImageUrl } from "@/lib/api/client"
 
 type Slide = {
   id: string
@@ -225,7 +226,7 @@ export default function CarouselComponent() {
                     <div className="p-4 md:p-8 flex items-center justify-center h-full cursor-pointer">
                       <Card className="relative w-full max-w-4xl h-[400px] md:h-[500px] lg:h-[600px] bg-red-700 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                         <Image
-                          src={slide.imageSrc || "/placeholder.svg"}
+                          src={getImageUrl(slide.imageSrc) || "/placeholder.svg"}
                           alt={slide.alt}
                           fill
                           sizes="100vw"

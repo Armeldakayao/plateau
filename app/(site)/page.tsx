@@ -603,6 +603,11 @@ import PageLoader from "@/components/page-loader";
 import HeroSection from "@/components/layout/hero-section";
 import CarouselComponent from "@/components/carousel-home";
 import DotsAnimation from "@/components/gradient";
+import { useRestaurantsQuery } from "@/hooks/places/use-places-queries";
+import { useCommuniques } from "@/hooks/communiques/use-communiques-queries";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { getImageUrl } from "@/lib/api/client";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -625,6 +630,23 @@ const staggerContainer = {
 };
 
 export default function Home() {
+  const [searchTerm, setSearchTerm] = useState("")
+    const [selectedCategory, setSelectedCategory] = useState("all")
+    const [selectedPeriod, setSelectedPeriod] = useState("all")
+    const [currentPage, setCurrentPage] = useState(1)
+    const itemsPerPage = 6
+   const router = useRouter()
+   const { data: restaurantsData, isLoading: restaurantsLoading } = useRestaurantsQuery({ limit: 8 })
+    const {
+       data: communiquesData,
+       isLoading,
+       error,
+     } = useCommuniques({
+       page: currentPage,
+       limit: itemsPerPage,
+       search: searchTerm || undefined,
+       type: selectedCategory !== "all" ? selectedCategory : undefined,
+     })
   return (
     
       <div>
@@ -726,10 +748,12 @@ export default function Home() {
           </div>
           {/* Contenu */}
 
-          <CarouselComponent />
+          <CarouselComponent 
+        restaurantsData={restaurantsData?.data} 
+        restaurantsLoading={restaurantsLoading}
+      />
         </motion.section>
-
-        <motion.section
+ {/* <motion.section
           className="py-12 bg-[#F5F5F5]"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -845,7 +869,97 @@ export default function Home() {
               </Button>
             </motion.div>
           </div>
-        </motion.section>
+        </motion.section> */}
+       
+<motion.section
+      className="py-12 bg-[#F5F5F5]"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8 }}
+    >
+      <DotsAnimation />
+      <div className="lg:px-28 px-7 space-y-7">
+        <motion.h2
+          className="lg:text-5xl text-2xl font-extrabold text-center text-primary"
+          {...fadeInUp}
+        >
+          À la une du plateau
+        </motion.h2>
+        <motion.p
+          className="text-2xl text-black font-light text-center opacity-70"
+          {...fadeInUp}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
+          Restez informé de la vie locale et des décisions municipales.
+        </motion.p>
+
+        {isLoading && <p className="text-center">Chargement...</p>}
+        {error && <p className="text-center text-red-500">Erreur lors du chargement</p>}
+
+        {!isLoading && !error && (
+          <motion.div
+            className="grid md:grid-cols-3 gap-6"
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+          >
+            {communiquesData?.data?.slice(0, 3).map((item) => (
+              <div
+                key={item.id}
+                className="cursor-pointer"
+                onClick={() => router.push(`/actualites/${item.id}`)}
+              >
+                <motion.div
+                  className="overflow-hidden rounded-xl p-0 flex justify-center items-center bg-white border border-gray-200"
+                  variants={scaleIn}
+                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                >
+                  <Image
+                    src={getImageUrl(item.poster) || "/placeholder.svg"}
+                    alt={item.title}
+                    width={100}
+                    height={100}
+                    className="w-full h-60 object-cover rounded-xl"
+                  />
+                </motion.div>
+                <div className="py-4">
+                  <h3 className="font-bold text-primary text-xl mb-2 line-clamp-1">
+                    {new Date(item.date).toLocaleDateString("fr-FR", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </h3>
+                  <p className="font-semibold text-2xl mb-3 line-clamp-2">
+                    {item.title}
+                  </p>
+                  <p className="text-gray-600 line-clamp-3">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        )}
+
+        <motion.div
+          className="text-center mt-8"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+        >
+          <Button
+            variant="outline"
+            className="text-lg text-white px-8 py-7 font-medium rounded-[7px] border bg-primary hover:bg-primary hover:text-white"
+            onClick={() => router.push("/actualites")}
+          >
+            Voir toutes les actualités
+          </Button>
+        </motion.div>
+      </div>
+    </motion.section>
 
         <motion.section
           className="my-20 mx-2"
