@@ -258,7 +258,8 @@ const {data:profileData}=useProfile()
               transition={{ delay: 0.8 }}
               className="flex items-center space-x-4"
             >
-              {!profileData?.email ? (
+              {//@ts-ignore
+              !profileData?.email ? (
                 <motion.div
                   animate={{ opacity: [1, 0.5, 1], scale: [1, 1.05, 1] }}
                   transition={{ duration: 1.5, repeat: Infinity }}

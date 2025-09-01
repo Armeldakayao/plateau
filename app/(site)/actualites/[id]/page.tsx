@@ -194,7 +194,7 @@ export default function ActualiteDetail() {
           {/* Article Content */}
           <motion.div variants={itemVariants} className="lg:col-span-2">
             <div className="bg-white rounded-xl shadow-sm p-8 md:p-12">
-              <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+              <div className="prose prose-lg max-w-none text-gray-700 text-xl leading-relaxed">
                 <div 
                  //@ts-ignore
                 dangerouslySetInnerHTML={{ __html: article.details.replace(/\n/g, "<br>") }} />
@@ -208,7 +208,7 @@ export default function ActualiteDetail() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     { //@ts-ignore
                     article.gallery.map((imageUrl, index) => (
-                      <div key={index} className="relative h-64 rounded-lg overflow-hidden">
+                      <div key={index} className="relative h-64 rounded-[7px] border overflow-hidden">
                         <Image
                           src={getImageUrl(imageUrl) || "/placeholder.svg"}
                           alt={`Image ${index + 1}`}
@@ -343,9 +343,9 @@ export default function ActualiteDetail() {
                   {relatedArticles.map((relatedArticle) => (
                     <Link key={relatedArticle.id} href={`/actualites/${relatedArticle.id}`} className="block group">
                       <div className="flex gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                        <div className="relative w-20 h-16 rounded-md overflow-hidden flex-shrink-0">
+                        <div className="relative w-20 h-16 rounded-[7px] border overflow-hidden flex-shrink-0">
                           <Image
-                            src={relatedArticle.poster || "/placeholder.svg"}
+                            src={getImageUrl(relatedArticle.poster) || "/placeholder.svg"}
                             alt={relatedArticle.title}
                             fill
                             className="object-cover"

@@ -4,6 +4,7 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 import { Users, MapPin, Briefcase, CalendarDays, Landmark, FileText } from "lucide-react"
 import IconLinkCard from "./icon-link-card"
+import VideoBg from "./videoBg"
 // import IconLinkCard from "./ui/icon-link-card"
 
 export default function HeroSection() {
@@ -46,7 +47,7 @@ export default function HeroSection() {
     loop
     playsInline
   />
-
+{/* <VideoBg/> */}
   {/* Overlay en dégradé */}
   <div className="absolute inset-0 bg-gradient-to-t from-[#000]/10 to-[#000]/10" />
 
