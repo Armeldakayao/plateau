@@ -1165,54 +1165,87 @@ export default function ServiceDetail() {
     )
   }
 
-  const renderForm = () => {
-    switch (serviceId) {
-      case "rendez-vous":
-        case "demander-rendez-vous":
-        return (
-          <div className="text-center bg-blue-50 p-10 rounded-xl">
-            <p className="text-2xl mb-6 font-semibold">Formulaire de demande de rendez-vous</p>
-            <p className="mb-4">Pour prendre rendez-vous, veuillez vous connecter sur  votre espace personnel</p>
-            <p className="text-xl font-bold mb-6">ou cliquez sur le bouton ci-dessous</p>
-            <Link href="/dashboard/client/new-request/rdv">
-              <Button className="bg-primary text-white px-8 py-4 text-lg rounded hover:bg-primary">
-                Faire ma demande de rendez-vous
-              </Button>
-            </Link>
-          </div>
-        )
-      case "mariage":
-        case "acte-mariage":
-        return (
-         <div className="text-center bg-blue-50 p-10 rounded-xl">
-            <p className="text-2xl mb-6 font-semibold">Formulaire de demande de mariage</p>
-            <p className="mb-4">Pour faire une demande de mariage, veuillez vous connecter sur  votre espace personnel</p>
-            <p className="text-xl font-bold mb-6">ou cliquez sur le bouton ci-dessous</p>
-            <Link href="/dashboard/client/new-request/mariage">
-              <Button className="bg-primary text-white px-8 py-4 text-lg rounded hover:bg-primary">
-                Faire ma demande de mariage
-              </Button>
-            </Link>
-          </div>
-        )
-      case "partenariat":
-        case "demander-partenariat":
-        return (
-         <div className="text-center bg-blue-50 p-10 rounded-xl">
-            <p className="text-2xl mb-6 font-semibold">Formulaire de demande de partenariat</p>
-            <p className="mb-4">Pour faire une demande de partenariat, veuillez vous connecter sur  votre espace personnel</p>
-            <p className="text-xl font-bold mb-6">ou cliquez sur le bouton ci-dessous</p>
-            <Link href="/dashboard/client/new-request/partenariat">
-              <Button className="bg-primary text-white px-8 py-4 text-lg rounded hover:bg-primary">
-                Faire ma demande de partenariat
-              </Button>
-            </Link>
-          </div>
-        )
-      default:
-        return <p className="text-red-500">Formulaire non disponible pour ce service.</p>
-    }
+ const renderForm = () => {
+  const cardStyle =
+    "bg-blue-50 lg:p-10 p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300";
+  const titleStyle = "text-2xl font-bold mb-4 flex items-center gap-2";
+  const subtitleStyle = "mb-4 text-gray-700 leading-relaxed";
+  const detailStyle = "mb-6 text-gray-600 text-base leading-relaxed";
+  const linkStyle =
+    "inline-block bg-primary text-white px-6 py-3 rounded-xl text-lg font-medium hover:bg-primary/90 transition-colors duration-300";
+
+  switch (serviceId) {
+    case "rendez-vous":
+    case "demander-rendez-vous":
+      return (
+        <div className={cardStyle}>
+          <p className={titleStyle}>📅 Formulaire de demande de rendez-vous</p>
+          <p className={subtitleStyle}>
+            Pour prendre rendez-vous, veuillez vous connecter sur votre espace personnel.
+          </p>
+          <p className={detailStyle}>
+            Ce service vous permet de fixer un rendez-vous avec nos équipes en quelques clics.
+            Une fois la demande envoyée, vous recevrez une confirmation ainsi que toutes les
+            informations nécessaires (date, heure, lieu et documents à préparer).
+          </p>
+          <p className="text-xl font-semibold mb-6">ou cliquez sur le lien ci-dessous :</p>
+          <Link className={linkStyle} href="/dashboard/client/new-request/rdv">
+            Faire ma demande de rendez-vous
+          </Link>
+        </div>
+      );
+
+    case "mariage":
+    case "acte-mariage":
+      return (
+        <div className={cardStyle}>
+          <p className={titleStyle}>💍 Formulaire de demande de mariage</p>
+          <p className={subtitleStyle}>
+            Pour faire une demande de mariage, veuillez vous connecter sur votre espace personnel.
+          </p>
+          <p className={detailStyle}>
+            Ce service vous guide dans toutes les démarches nécessaires à la préparation
+            de votre mariage civil. Vous pourrez déposer vos pièces justificatives en ligne,
+            suivre l’avancement de votre dossier et être informé de chaque étape.
+          </p>
+          <p className="text-xl font-semibold mb-6">ou cliquez sur le lien ci-dessous :</p>
+          <Link className={linkStyle} href="/dashboard/client/new-request/mariage">
+            Faire ma demande de mariage
+          </Link>
+        </div>
+      );
+
+    case "partenariat":
+    case "demander-partenariat":
+      return (
+        <div className={cardStyle}>
+          <p className={titleStyle}>🤝 Formulaire de demande de partenariat</p>
+          <p className={subtitleStyle}>
+            Pour faire une demande de partenariat, veuillez vous connecter sur votre espace personnel.
+          </p>
+          <p className={detailStyle}>
+            Vous êtes une entreprise, une association ou un particulier souhaitant collaborer
+            avec nous ? Ce formulaire vous permet de présenter votre projet et vos attentes.
+            Nos équipes analyseront votre demande et vous contacteront rapidement pour discuter
+            des modalités de partenariat.
+          </p>
+          <p className="text-xl font-semibold mb-6">ou cliquez sur le lien ci-dessous :</p>
+          <Link className={linkStyle} href="/dashboard/client/new-request/partenariat">
+            Faire ma demande de partenariat
+          </Link>
+        </div>
+      );
+
+    default:
+      return (
+        <p className="text-red-500 text-lg font-semibold">
+          Formulaire non disponible pour ce service.
+        </p>
+      );
   }
+};
+
+
 
   return (
     <div className="bg-white min-h-screen">
@@ -1237,9 +1270,9 @@ export default function ServiceDetail() {
               </motion.p>
             </div>
           </div>
-          <div className="grid md:grid-cols-3 gap-20 p-20">
+          <div className="grid lg:grid-cols-3 grid-cols-1 lg:gap-20 gap-7 lg:p-20 p-7">
             <motion.div
-              className="md:col-span-2 px-10 bg-blue-50 p-10 shadow-lg rounded-xl border"
+              className="lg:col-span-2 col-1 lg:px-10  p-10  rounded-xl border"
               variants={itemVariants}
             >
               {renderForm()}

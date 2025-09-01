@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
+import { getImageUrl } from "@/lib/api/client"
 
 type Landmark = {
   id: string
@@ -50,7 +51,7 @@ export default function InfiniteCarousel({ landmarks, landmarksLoading }: Infini
   }, [slides.length])
 
   const handleSlideClick = (restaurantId: string) => {
-    window.location.href = `restaurant/${restaurantId}`
+    window.location.href = `ou-aller/${restaurantId}`
   }
 
   // Afficher un loader si les données sont en cours de chargement
@@ -108,7 +109,7 @@ export default function InfiniteCarousel({ landmarks, landmarksLoading }: Infini
             >
               {/* Image Slide */}
               <Image
-                src={slides[currentSlide].image}
+                src={getImageUrl(slides[currentSlide].image) || "/placeholder.jpg"}
                 alt={slides[currentSlide].title}
                 fill
                 className="object-cover"
