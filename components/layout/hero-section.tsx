@@ -48,7 +48,7 @@ export default function HeroSection() {
   />
 
   {/* Overlay en dégradé */}
-  <div className="absolute inset-0 bg-gradient-to-t from-[#0D4C8E]/40 to-[#0D4C8E]/40" />
+  <div className="absolute inset-0 bg-gradient-to-t from-[#000]/30 to-[#000]/30" />
 
   {/* Contenu par-dessus la vidéo */}
   <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white ">

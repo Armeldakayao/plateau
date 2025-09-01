@@ -145,10 +145,15 @@ export default function CreateMariagePage() {
   const watchReserveRoom = form.watch("reserveRoom")
 const queryClient =useQueryClient()
   const onSubmit = async (data: MariageFormData) => {
+    const payload = {
+    ...data,
+    time2: data.time2 || "",
+    time3: data.time3 || "",
+  };
     try {
       // Here you would call your API to create the marriage request
        //@ts-ignore
-      await createMariageRequest.mutateAsync(data)
+      await createMariageRequest.mutateAsync(payload)
        queryClient.invalidateQueries({
       queryKey: ["notifications", "list", {"filters":1}],
     })

@@ -1797,6 +1797,7 @@ import { Hotel, Star, MapPin, Utensils, Camera, ChevronLeft, ChevronRight, Play,
 import { useRestaurantsQuery, useHotelsQuery, useActivitiesQuery } from "@/hooks/places/use-places-queries"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getImageUrl } from "@/lib/api/client"
+import { link } from "fs"
 
 // Animation variants
 const fadeInUp = {
@@ -1849,9 +1850,9 @@ function HeroSection() {
   const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
 
   const categoryCards = [
-    { icon: Utensils, title: "Restaurants", color: "bg-orange-500", delay: 0.2 },
-    { icon: Hotel, title: "Hôtels", color: "bg-blue-500", delay: 0.4 },
-    { icon: Camera, title: "Activités", color: "bg-green-500", delay: 0.6 },
+    { icon: Utensils, title: "Restaurants", color: "bg-orange-500", delay: 0.2 ,link:"/ou-aller/places?type=restaurants"},
+    { icon: Hotel, title: "Hôtels", color: "bg-blue-500", delay: 0.4,link:"/ou-aller/places?type=hotels" },
+    { icon: Camera, title: "Activités", color: "bg-green-500", delay: 0.6 ,link:"/ou-aller/places?type=activites"},
   ]
 
   return (
@@ -1932,6 +1933,7 @@ function HeroSection() {
               {categoryCards.map((card, index) => (
                  //@ts-ignore
                 <motion.div
+                  onClick={()=>window.location.href=card.link}
                   key={card.title}
                   variants={fadeInUp}
                   transition={{ delay: card.delay }}
