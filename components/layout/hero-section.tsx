@@ -48,20 +48,20 @@ export default function HeroSection() {
   />
 
   {/* Overlay en dégradé */}
-  <div className="absolute inset-0 bg-gradient-to-t from-[#000]/30 to-[#000]/30" />
+  <div className="absolute inset-0 bg-gradient-to-t from-[#000]/10 to-[#000]/10" />
 
   {/* Contenu par-dessus la vidéo */}
   <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white ">
     {/* Headings */}
-    <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 max-w-4xl pb-7 ">
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 py-10 opacity-0 max-w-4xl pb-7 ">
       <motion.h1
         variants={item}
-        className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter drop-shadow-lg pt-16"
+        className="text-4xl md:text-6xl lg:text-7xl opacity-0 font-bold tracking-tighter drop-shadow-lg pt-16"
       >
-        BIENVENUE DANS VOTRE COMMUNE
+       
       </motion.h1>
-      <motion.p variants={item} className="text-lg md:text-xl lg:text-3xl max-w-4xl pb-16 mx-auto drop-shadow-md">
-        Faites vos demandes sans vous déplacer : état civil, rendez-vous, réservations, signalements…
+      <motion.p variants={item} className="text-lg md:text-xl opacity-0 lg:text-3xl max-w-4xl pb-16 mx-auto drop-shadow-md">
+       
       </motion.p>
     </motion.div>
 
