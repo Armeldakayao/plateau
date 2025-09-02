@@ -255,8 +255,12 @@ export default function AdminServiceRequestsPage() {
                         request.email}</div>
                       </div>
                     </TableCell>
-                    <TableCell>{ //@ts-ignore
-                    getEtatBadge(request.traitements[0].etat || request.etat)}</TableCell>
+                    <TableCell>{ 
+                   getEtatBadge(
+                    //@ts-ignore
+  request.traitements?.[0]?.etat ?? request.etat
+)
+}</TableCell>
                     {/* <TableCell>
                       <Badge variant={request.priorite === "urgente" ? "destructive" : "secondary"}>
                         {PRIORITE_OPTIONS.find((p) => p.value === request.priorite)?.label || request.priorite}

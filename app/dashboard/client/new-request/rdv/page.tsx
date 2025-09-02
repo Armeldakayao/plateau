@@ -66,14 +66,14 @@ const rdvSchema = z.object({
   telephone: z.string().min(8, "Numéro de téléphone invalide"),
   profession: z.string().min(2, "La profession est requise"),
   institution: z.string().min(2, "L'institution est requise"),
-  nationalId: z.string().min(4, "Numéro d'identité invalide"),
+  nationalId: z.string().min(2, "Numéro d'identité invalide"),
   meetingTarget: z.string().min(1, "Veuillez sélectionner un objectif"),
   otherMeetingTarget: z.string().optional(),
   subject: z.string().min(1, "Veuillez sélectionner un sujet"),
   otherSubject: z.string().optional(),
   preferredSlot1: z.string().min(1, "Premier créneau requis"),
-  preferredSlot2: z.string().optional(),
-  preferredSlot3: z.string().optional(),
+  preferredSlot2: z.string().min(1, "Deuxieme créneau requis"),
+  preferredSlot3: z.string().min(1, "Troisième créneau requis"),
   meetingType: z.string().min(1, "Type de rendez-vous requis"),
   certifyAccuracy: z.boolean().refine((val) => val === true, "Vous devez certifier l'exactitude des informations"),
   authorizeContact: z.boolean().refine((val) => val === true, "Vous devez autoriser le contact"),
@@ -120,27 +120,59 @@ useEffect(() => {
   const watchMeetingTarget = form.watch("meetingTarget")
   const watchSubject = form.watch("subject")
 const queryClient =useQueryClient()
-  const onSubmit = async (data: RdvFormData) => {
-    try {
-       //@ts-ignore
-      await createRdv.mutateAsync(data)
-       queryClient.invalidateQueries({
+  // const onSubmit = async (data: RdvFormData) => {
+  //   try {
+  //      //@ts-ignore
+  //     await createRdv.mutateAsync(data)
+  //      queryClient.invalidateQueries({
+  //     queryKey: ["notifications", "list", {"filters":1}],
+  //   })
+  //     toast({
+  //       title: "Demande soumise avec succès",
+  //       description: "Votre demande de rendez-vous a été envoyée et sera traitée dans les plus brefs délais.",
+  //     })
+  //     router.push("/dashboard/client/service-request?success=rdv-created")
+  //   } catch (error) {
+  //     console.error("Erreur lors de la création:", error)
+  //     toast({
+  //       title: "Erreur",
+  //       description: "Une erreur est survenue lors de la soumission de votre demande. Veuillez réessayer.",
+  //       variant: "destructive",
+  //     })
+  //   }
+  // }
+const onSubmit = async (data: RdvFormData) => {
+  // Supprimer les champs vides
+  const cleanedData = Object.fromEntries(
+    Object.entries(data).filter(([_, v]) => v !== "")
+  );
+
+  try {
+    //@ts-ignore
+    await createRdv.mutateAsync({
+  ...cleanedData,
+  preferredSlot2: data.preferredSlot2 ?? undefined,
+  preferredSlot3: data.preferredSlot3 ?? undefined
+}
+
+)
+    queryClient.invalidateQueries({
       queryKey: ["notifications", "list", {"filters":1}],
     })
-      toast({
-        title: "Demande soumise avec succès",
-        description: "Votre demande de rendez-vous a été envoyée et sera traitée dans les plus brefs délais.",
-      })
-      router.push("/dashboard/client/service-request?success=rdv-created")
-    } catch (error) {
-      console.error("Erreur lors de la création:", error)
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de la soumission de votre demande. Veuillez réessayer.",
-        variant: "destructive",
-      })
-    }
+    toast({
+      title: "Demande soumise avec succès",
+      description: "Votre demande de rendez-vous a été envoyée et sera traitée dans les plus brefs délais.",
+    })
+    router.push("/dashboard/client/service-request?success=rdv-created")
+  } catch (error) {
+    console.error("Erreur lors de la création:", error)
+    toast({
+      title: "Erreur",
+      description: "Une erreur est survenue lors de la soumission de votre demande. Veuillez réessayer.",
+      variant: "destructive",
+    })
   }
+}
 
   const nextStep = () => {
     if (currentStep < STEPS.length) {
@@ -491,7 +523,7 @@ const queryClient =useQueryClient()
                   name="preferredSlot2"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Deuxième choix (optionnel)</FormLabel>
+                      <FormLabel>Deuxième choix </FormLabel>
                       <FormControl>
                         <Input type="datetime-local" {...field} min={new Date().toISOString().slice(0, 16)} />
                       </FormControl>
@@ -505,7 +537,7 @@ const queryClient =useQueryClient()
                   name="preferredSlot3"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Troisième choix (optionnel)</FormLabel>
+                      <FormLabel>Troisième choix </FormLabel>
                       <FormControl>
                         <Input type="datetime-local" {...field} min={new Date().toISOString().slice(0, 16)} />
                       </FormControl>

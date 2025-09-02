@@ -136,7 +136,8 @@ const queryClient =useQueryClient()
         title: "Demande soumise avec succès",
         description: "Votre demande de partenariat a été envoyée et sera traitée dans les plus brefs délais.",
       })
-     router.push("/dashboard/client/service-request?success=mariage-created")
+      window.location.href = "/dashboard/client/service-request?success=partenariat-created"
+    //  router.push("/dashboard/client/service-request?success=mariage-created")
     } catch (error) {
       console.error("Erreur lors de la création:", error)
       toast({

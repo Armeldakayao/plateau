@@ -44,7 +44,7 @@ const formSchema = z
     password: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères"),
     confirmPassword: z.string().min(6, "La confirmation du mot de passe est requise"),
     idType: z.string().min(1, "Le type de pièce d'identité est requis"),
-    idNumber: z.string().min(1, "Le numéro de pièce d'identité est requis"),
+    idNumber: z.string().min(4, "Le numéro de pièce d'identité est requis"),
     acceptTerms: z.boolean().refine((val) => val === true, {
       message: "Vous devez accepter les conditions d'utilisation",
     }),

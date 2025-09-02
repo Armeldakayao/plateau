@@ -1120,8 +1120,11 @@ export default function ServiceRequestDetailPage() {
             </div>
             <div className="flex flex-wrap gap-3">
               {
+             getEtatBadge(
                  //@ts-ignore
-              getEtatBadge(request.traitements ? request.traitements[0].etat : request.etat)}
+  request.traitements?.[0]?.etat ?? request.etat
+)
+}
               <Badge variant="outline" className="bg-gradient-to-r from-violet-50 to-purple-50 text-violet-700 border-violet-200">
                 {
                    //@ts-ignore

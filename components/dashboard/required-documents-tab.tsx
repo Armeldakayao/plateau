@@ -155,26 +155,56 @@ export function RequiredDocumentsTab({
   // Combine required documents from service and treatment
   const allRequiredDocs = [...new Set([...requiredDocuments, ...documentsRequis])]
 
-  const getDocumentStatus = (docName: string) => {
-    const uploaded = uploadedDocuments.find(
-      (doc) =>
-        doc.type.toLowerCase() === docName.toLowerCase() ||
-        doc.nom.toLowerCase().includes(docName.toLowerCase()) ||
-        docName.toLowerCase().includes(doc.type.toLowerCase()),
-    )
+  // const getDocumentStatus = (docName: string) => {
+  //   const uploaded = uploadedDocuments.find(
+  //     (doc) =>
+  //       doc.type.toLowerCase() === docName.toLowerCase() ||
+  //       doc.nom.toLowerCase().includes(docName.toLowerCase()) ||
+  //       docName.toLowerCase().includes(doc.type.toLowerCase()) ||
+  //       doc.type.toLowerCase().includes(docName.toLowerCase()),
+  //   )
 
-    if (uploaded) {
-      return {
-        status: "uploaded" as const,
-        document: uploaded,
-      }
-    }
+  //   if (uploaded) {
+  //     return {
+  //       status: "uploaded" as const,
+  //       document: uploaded,
+  //     }
+  //   }
 
+  //   return {
+  //     status: "missing" as const,
+  //     document: null,
+  //   }
+  // }
+const normalize = (str: string) =>
+  str.toLowerCase().replace(/[_]/g, " ").trim();
+
+const getDocumentStatus = (docName: string) => {
+  const normalizedName = normalize(docName);
+
+  const uploaded = uploadedDocuments.find((doc) => {
+    const normalizedType = normalize(doc.type);
+    const normalizedNom = normalize(doc.nom);
+
+    return (
+      normalizedType === normalizedName ||
+      normalizedNom.includes(normalizedName) ||
+      normalizedName.includes(normalizedType)
+    );
+  });
+
+  if (uploaded) {
     return {
-      status: "missing" as const,
-      document: null,
-    }
+      status: "uploaded" as const,
+      document: uploaded,
+    };
   }
+
+  return {
+    status: "missing" as const,
+    document: null,
+  };
+};
 
   const getStatusBadge = (status: "uploaded" | "missing") => {
     switch (status) {
@@ -213,7 +243,7 @@ export function RequiredDocumentsTab({
       window.open(document.url, "_blank")
     }
   }
-
+console.log({ allRequiredDocs, uploadedDocuments },"//////")
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
