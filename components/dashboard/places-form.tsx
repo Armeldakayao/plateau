@@ -150,38 +150,76 @@ export function PlacesForm({ initialData, mode = "create", onSuccess, onCancel }
     setGalleryPreviews((prev) => prev.filter((_, i) => i !== index))
   }
 
-  const onSubmit = async (data: PlacesFormData) => {
-    try {
-      if (mode === "create") {
-         //@ts-ignore
-        await createMutation.mutateAsync(data)
-        toast({
-          title: "Succès",
-          description: "Lieu créé avec succès",
-        })
-      } else {
-        if (!initialData?.id) {
-          throw new Error("ID manquant pour la mise à jour")
-        }
-        await updateMutation.mutateAsync({
-          id: initialData.id,
-          data,
-        })
-        toast({
-          title: "Succès",
-          description: "Lieu modifié avec succès",
-        })
-      }
-      onSuccess?.()
-    } catch (error) {
-      console.error("Erreur lors de la soumission:", error)
-      toast({
-        title: "Erreur",
-        description: "Erreur lors de la sauvegarde",
-        variant: "destructive",
-      })
+  // const onSubmit = async (data: PlacesFormData) => {
+  //   try {
+  //     if (mode === "create") {
+  //        //@ts-ignore
+  //       await createMutation.mutateAsync(data)
+  //       toast({
+  //         title: "Succès",
+  //         description: "Lieu créé avec succès",
+  //       })
+  //     } else {
+  //       if (!initialData?.id) {
+  //         throw new Error("ID manquant pour la mise à jour")
+  //       }
+  //       await updateMutation.mutateAsync({
+  //         id: initialData.id,
+  //         data,
+  //       })
+  //       toast({
+  //         title: "Succès",
+  //         description: "Lieu modifié avec succès",
+  //       })
+  //     }
+  //     onSuccess?.()
+  //   } catch (error) {
+  //     console.error("Erreur lors de la soumission:", error)
+  //     toast({
+  //       title: "Erreur",
+  //       description: "Erreur lors de la sauvegarde",
+  //       variant: "destructive",
+  //     })
+  //   }
+  // }
+const onSubmit = async (data: PlacesFormData) => {
+  try {
+    // Si aucun site n'est renseigné, générer un lien Google Search
+    if (!data.website || data.website.trim() === "") {
+      const query = encodeURIComponent(data.title.trim());
+      data.website = `https://www.google.com/search?q=${query}`;
     }
+
+    if (mode === "create") {
+      //@ts-ignore
+      await createMutation.mutateAsync(data);
+      toast({
+        title: "Succès",
+        description: "Lieu créé avec succès",
+      });
+    } else {
+      if (!initialData?.id) {
+        throw new Error("ID manquant pour la mise à jour");
+      }
+      await updateMutation.mutateAsync({
+        id: initialData.id,
+        data,
+      });
+      toast({
+        title: "Succès",
+        description: "Lieu modifié avec succès",
+      });
+    }
+    onSuccess?.();
+  } catch (error) {
+    console.error("Erreur lors de la soumission:", error);
+    toast({
+      title: "Erreur",
+      description: "Erreur lors de la sauvegarde",
+      variant: "destructive",
+    });
   }
+};
 
   const isLoading =
     createMutation.isPending || updateMutation.isPending || uploadSingle.isPending || uploadMultiple.isPending

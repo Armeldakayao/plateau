@@ -69,7 +69,7 @@ export const useDeletePlaceMutation = () => {
       try {
         const response = await apiClient.places.delete(id)
         dismiss(loadingToast)
-        showSuccess("Lieu supprimé avec succès")
+       queryClient.invalidateQueries({ queryKey: placesKeys.all })
         return response
       } catch (error) {
         dismiss(loadingToast)

@@ -2395,20 +2395,52 @@ function NotificationDetailsModal({ isOpen, onClose, notification }: Notificatio
     }
   }
 
-  const getEtatColor = (etat: string) => {
-    switch (etat) {
-      case "en_attente":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200"
-      case "en_cours":
-        return "bg-blue-100 text-blue-800 border-blue-200"
-      case "termine":
-        return "bg-green-100 text-green-800 border-green-200"
-      case "annule":
-        return "bg-red-100 text-red-800 border-red-200"
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200"
-    }
+  // const getEtatColor = (etat: string) => {
+  //   switch (etat) {
+  //     case "en_attente":
+  //       return "bg-yellow-100 text-yellow-800 border-yellow-200"
+  //     case "en_cours":
+  //       return "bg-blue-100 text-blue-800 border-blue-200"
+  //     case "termine":
+  //       return "bg-green-100 text-green-800 border-green-200"
+  //     case "annule":
+  //       return "bg-red-100 text-red-800 border-red-200"
+  //     default:
+  //       return "bg-gray-100 text-gray-800 border-gray-200"
+  //   }
+  // }
+// Map statut → classes Tailwind
+const typeToEtat = (type: string) => {
+  switch (type) {
+    case "error":
+      return { etat: "annule", label: "Annulé" }
+    case "success":
+      return { etat: "termine", label: "Terminé" }
+    case "info":
+      return { etat: "en_cours", label: "En cours" }
+    default:
+      return { etat: "en_attente", label: "En attente" }
   }
+}
+
+// Map état → classes Tailwind
+const getEtatColor = (etat: string) => {
+  switch (etat) {
+    case "en_attente":
+      return "bg-yellow-100 text-yellow-800 border-yellow-200"
+    case "en_cours":
+      return "bg-blue-100 text-blue-800 border-blue-200"
+    case "termine":
+      return "bg-green-100 text-green-800 border-green-200"
+    case "annule":
+      return "bg-red-100 text-red-800 border-red-200"
+    default:
+      return "bg-gray-100 text-gray-800 border-gray-200"
+  }
+}
+
+ const { etat, label } = typeToEtat(notification.type)
+  const badgeClasses = getEtatColor(etat)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -2432,9 +2464,13 @@ function NotificationDetailsModal({ isOpen, onClose, notification }: Notificatio
                     <Priority className="w-3 h-3 mr-1" />
                     {serviceRequest.priorite}
                   </Badge>
-                  <Badge className={`${getEtatColor(serviceRequest.etat)} border`}>
-                    {serviceRequest.etat.replace("_", " ")}
-                  </Badge>
+                  {/* <Badge className={`${getEtatColor(serviceRequest.type=="error" ? "annule" : serviceRequest.type==="success" ? "termine" : serviceRequest.type===" info" ? "en_cours" : "en_attente")} border`}>
+                    {serviceRequest.type.replace("_", " ") =="error" ? "Annulé" : serviceRequest.type==="success" ? "Terminé" : serviceRequest.type==="info" ? "En cours" : "En attente"}
+                  </Badge> */}
+                 <Badge key={serviceRequest.id} className={`${badgeClasses} border`}>
+      {label}
+    </Badge>
+
                 </div>
               </div>
               <div className="text-right">
